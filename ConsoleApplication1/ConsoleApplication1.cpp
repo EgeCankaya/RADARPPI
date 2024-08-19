@@ -15,11 +15,6 @@ class RadarDisplay {
 public:
     RadarDisplay() : angle(0.0f), outerRange(300.0f), searchStartAngle(0.0f), searchEndAngle(30.0f), highlightDuration(1500), lastDetectionTime(0), rangeScale(1), heightLowlimit(15), heightUplimit(30), lineGap(30), boxID(0), isClicked(false), maxRange(300), clockwise(true) {}
 
-    float left = -1.0f, right = 1.0f, bottom = -1.0f, top = 1.0f;
-    const float zNear = -1.0f, zFar = 1.0f;
-
-    const float zoomFactor = 0.1f;
-
     void init() {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     }
@@ -49,7 +44,7 @@ public:
     }
 
     void reshape(int width, int height) {
-        int size = std::min(width, height);  
+        int size = min(width, height);  
 
         glViewport((width - size) / 2, (height - size) / 2, size, size);  
         glMatrixMode(GL_PROJECTION);
@@ -245,7 +240,15 @@ private:
     int maxRange;
     string inputBuffer;
     bool clockwise;
+    
     float scale;
+    float left = -1.0f;
+    float right = 1.0f;
+    float bottom = -1.0f;
+    float top = 1.0f;
+
+    const float zNear = -1.0f, zFar = 1.0f;
+    const float zoomFactor = 0.1f;
    
     vector<Enemy> enemies;
 
@@ -698,22 +701,26 @@ private:
             glutPostRedisplay();
         }
     }
+
     void mouse(int button, int state, int x, int y) {
         if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-
             int width = glutGet(GLUT_WINDOW_WIDTH);
             int height = glutGet(GLUT_WINDOW_HEIGHT);
-            float boxWidth = 0.15f;
-            float boxHeight = 0.075f;
 
-            mousePosX = 2.0f * (x - width / 2) / min(width, height);
-            mousePosY = 2.0f * (height / 2 - y) / min(width, height);
+          
+            float mouseX = 2.0f * (x - width / 2) / min(width, height);
+            float mouseY = 2.0f * (height / 2 - y) / min(width, height);
 
+         
+            mousePosX = left + (right - left) * (mouseX + 1.0f) / 2.0f;
+            mousePosY = bottom + (top - bottom) * (mouseY + 1.0f) / 2.0f;
+
+     
             if (currentscreen == Screen::Main) {
-                if (isMouseClickInsideBox(0.60f, -0.85f, boxWidth, boxHeight)) {
+                if (isMouseClickInsideBox(0.60f, -0.85f, 0.15f, 0.075f)) {
                     decreaseRange();
                 }
-                else if (isMouseClickInsideBox(0.75f, -0.85f, boxWidth, boxHeight)) {
+                else if (isMouseClickInsideBox(0.75f, -0.85f, 0.15f, 0.075f)) {
                     increaseRange();
                 }
                 else if (isMouseClickInsideBox(-0.95f, 0.85f, 0.25f, 0.1f)) {
@@ -721,64 +728,77 @@ private:
                 }
             }
             else if (currentscreen == Screen::Settings) {
-                if (isMouseClickInsideBox(-0.95f, 0.85f, 0.25f, 0.1f)) {
-                    currentscreen = Screen::Main;
+                if (currentscreen == Screen::Main) {
+                    if (isMouseClickInsideBox(0.60f, -0.85f, 0.15f, 0.075f)) {
+                        decreaseRange();
+                    }
+                    else if (isMouseClickInsideBox(0.75f, -0.85f, 0.15f, 0.075f)) {
+                        increaseRange();
+                    }
+                    else if (isMouseClickInsideBox(-0.95f, 0.85f, 0.25f, 0.1f)) {
+                        currentscreen = Screen::Settings;
+                    }
                 }
+                else if (currentscreen == Screen::Settings) {
+                    if (isMouseClickInsideBox(-0.95f, 0.85f, 0.25f, 0.1f)) {
+                        currentscreen = Screen::Main;
+                    }
 
-                else if (isMouseClickInsideBox(-0.40f, 0.70f, 0.15f, 0.1f)) { 
-                    decreaseHeightUp(); 
-                }
+                    else if (isMouseClickInsideBox(-0.40f, 0.70f, 0.15f, 0.1f)) {
+                        decreaseHeightUp();
+                    }
 
-                else if (isMouseClickInsideBox(-0.25f, 0.70f, 0.15f, 0.1f)) { 
-                    increaseHeightUp(); 
-                }
+                    else if (isMouseClickInsideBox(-0.25f, 0.70f, 0.15f, 0.1f)) {
+                        increaseHeightUp();
+                    }
 
-                else if (isMouseClickInsideBox(-0.40f, 0.55f, 0.15f, 0.1f)) { 
-                    decreaseHeightLow(); 
-                }
+                    else if (isMouseClickInsideBox(-0.40f, 0.55f, 0.15f, 0.1f)) {
+                        decreaseHeightLow();
+                    }
 
-                else if (isMouseClickInsideBox(-0.25f, 0.55f, 0.15f, 0.1f)) { 
-                    increaseHeightLow(); 
-                }
+                    else if (isMouseClickInsideBox(-0.25f, 0.55f, 0.15f, 0.1f)) {
+                        increaseHeightLow();
+                    }
 
-                else if (isMouseClickInsideBox(-0.40f, 0.40f, 0.15f, 0.1f)) { 
-                    decreaseRange(); 
-                }
+                    else if (isMouseClickInsideBox(-0.40f, 0.40f, 0.15f, 0.1f)) {
+                        decreaseRange();
+                    }
 
-                else if (isMouseClickInsideBox(-0.25f, 0.40f, 0.15f, 0.1f)) { 
-                    increaseRange(); 
-                }
+                    else if (isMouseClickInsideBox(-0.25f, 0.40f, 0.15f, 0.1f)) {
+                        increaseRange();
+                    }
 
-                else if (isMouseClickInsideBox(-0.20f, 0.25f, 0.13f, 0.1f)) { 
-                    decreaseLineGap(); 
-                }
+                    else if (isMouseClickInsideBox(-0.20f, 0.25f, 0.13f, 0.1f)) {
+                        decreaseLineGap();
+                    }
 
-                else if (isMouseClickInsideBox(-0.07f, 0.25f, 0.13f, 0.1f)) { 
-                    increaseLineGap(); 
-                }
+                    else if (isMouseClickInsideBox(-0.07f, 0.25f, 0.13f, 0.1f)) {
+                        increaseLineGap();
+                    }
 
-                else if (isMouseClickInsideBox(-0.70f, 0.70f, 0.30f, 0.1f)) {
-                    boxID = 0;
-                    isClicked = true;
-                }
+                    else if (isMouseClickInsideBox(-0.70f, 0.70f, 0.30f, 0.1f)) {
+                        boxID = 0;
+                        isClicked = true;
+                    }
 
-                else if (isMouseClickInsideBox(-0.70f, 0.55f, 0.30f, 0.1f)) {
-                    boxID = 1;
-                    isClicked = true;
-                }
+                    else if (isMouseClickInsideBox(-0.70f, 0.55f, 0.30f, 0.1f)) {
+                        boxID = 1;
+                        isClicked = true;
+                    }
 
-                else if (isMouseClickInsideBox(-0.70f, 0.40f, 0.30f, 0.1f)) {
-                    boxID = 2;
-                    isClicked = true;
-                }
+                    else if (isMouseClickInsideBox(-0.70f, 0.40f, 0.30f, 0.1f)) {
+                        boxID = 2;
+                        isClicked = true;
+                    }
 
-                else if (isMouseClickInsideBox(-0.70f, 0.25f, 0.50f, 0.1f)) {
-                    boxID = 3;
-                    isClicked = true;
-                }
-                else if (isMouseClickInsideBox(-0.70f, 0.10f, 0.52f, 0.1f)) {
-                    if (clockwise) clockwise = false;
-                    else clockwise = true;
+                    else if (isMouseClickInsideBox(-0.70f, 0.25f, 0.50f, 0.1f)) {
+                        boxID = 3;
+                        isClicked = true;
+                    }
+                    else if (isMouseClickInsideBox(-0.70f, 0.10f, 0.52f, 0.1f)) {
+                        if (clockwise) clockwise = false;
+                        else clockwise = true;
+                    }
                 }
             }
         }
@@ -788,29 +808,62 @@ private:
         int width = glutGet(GLUT_WINDOW_WIDTH);
         int height = glutGet(GLUT_WINDOW_HEIGHT);
 
-        mousePosX = 2.0f * (x - width / 2) / min(width, height);
-        mousePosY = 2.0f * (height / 2 - y) / min(width, height);
+        // Calculate mouse position in window space
+        float mouseX = 2.0f * (x - width / 2) / min(width, height);
+        float mouseY = 2.0f * (height / 2 - y) / min(width, height);
+
+        // Transform to the zoomed coordinate system
+        mousePosX = left + (right - left) * (mouseX + 1.0f) / 2.0f;
+        mousePosY = bottom + (top - bottom) * (mouseY + 1.0f) / 2.0f;
     }
 
+
     void mouseWheel(int wheel, int direction, int x, int y) {
+        int width = glutGet(GLUT_WINDOW_WIDTH);
+        int height = glutGet(GLUT_WINDOW_HEIGHT);
+
+        // Calculate mouse position in window space
+        float mouseX = 2.0f * (x - width / 2) / min(width, height);
+        float mouseY = 2.0f * (height / 2 - y) / min(width, height);
+
+        // Transform to the zoomed coordinate system
+        mouseX = left + (right - left) * (mouseX + 1.0f) / 2.0f;
+        mouseY = bottom + (top - bottom) * (mouseY + 1.0f) / 2.0f;
+
+        // Perform zooming as before
         if (direction > 0) {
-            
-            left += zoomFactor;
-            right -= zoomFactor;
-            bottom += zoomFactor;
-            top -= zoomFactor;
+            float newLeft = left + zoomFactor * (mouseX - left) / (right - left);
+            float newRight = right - zoomFactor * (right - mouseX) / (right - left);
+            float newBottom = bottom + zoomFactor * (mouseY - bottom) / (top - bottom);
+            float newTop = top - zoomFactor * (top - mouseY) / (top - bottom);
+
+            if (newRight > newLeft && newTop > newBottom) {
+                left = newLeft;
+                right = newRight;
+                bottom = newBottom;
+                top = newTop;
+            }
         }
         else {
-            
-            left -= zoomFactor;
-            right += zoomFactor;
-            bottom -= zoomFactor;
-            top += zoomFactor;
+            float newLeft = left - zoomFactor * (mouseX - left) / (right - left);
+            float newRight = right + zoomFactor * (right - mouseX) / (right - left);
+            float newBottom = bottom - zoomFactor * (mouseY - bottom) / (top - bottom);
+            float newTop = top + zoomFactor * (top - mouseY) / (top - bottom);
+
+            if (newRight > newLeft && newTop > newBottom) {
+                left = newLeft;
+                right = newRight;
+                bottom = newBottom;
+                top = newTop;
+            }
         }
-        
-        reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+        reshape(width, height);
         glutPostRedisplay();
     }
+
+
+
 
     void renderValues(float x, float y, const char* text) {
         glPushMatrix();
