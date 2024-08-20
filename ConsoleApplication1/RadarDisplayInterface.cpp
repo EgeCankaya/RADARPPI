@@ -24,4 +24,4 @@ void RadarDisplayInit() {
 
 void radarAddEnemy(float distance, float angle, float height) {
     radar.enemyWrapper(distance, angle, height);
-},
+}
