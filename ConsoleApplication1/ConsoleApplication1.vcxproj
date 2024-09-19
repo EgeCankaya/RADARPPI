@@ -131,18 +131,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleApplication1.cpp" />
-    <ClCompile Include="Display.cpp" />
-    <ClCompile Include="DrawingLabels.cpp" />
-    <ClCompile Include="InteractionHandler.cpp" />
-    <ClCompile Include="RadarDisplayInterface.cpp" />
-    <ClCompile Include="Variables.cpp" />
+    <ClCompile Include="CRadarDisplay.cpp" />
+    <ClCompile Include="CDisplay.cpp" />
+    <ClCompile Include="CDrawingLabels.cpp" />
+    <ClCompile Include="CInteractionHandler.cpp" />
+    <ClCompile Include="CRadarPPI.cpp" />
+    <ClCompile Include="_Variables.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Display.h" />
-    <ClInclude Include="DrawingLabels.h" />
-    <ClInclude Include="InteractionHandler.h" />
-    <ClInclude Include="RadarDisplayInterface.h" />
-    <ClInclude Include="Variables.h" />
+    <ClInclude Include="CRadarDisplay.h" />
+    <ClInclude Include="CDisplay.h" />
+    <ClInclude Include="CDrawingLabels.h" />
+    <ClInclude Include="CInteractionHandler.h" />
+    <ClInclude Include="CRadarPPI.h" />
+    <ClInclude Include="IRadarDisplay.h" />
+    <ClInclude Include="RadarPPI.h" />
+    <ClInclude Include="_Variables.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

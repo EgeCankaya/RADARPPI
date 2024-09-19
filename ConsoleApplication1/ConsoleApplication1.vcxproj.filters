@@ -18,36 +18,48 @@
     <ClCompile Include="ConsoleApplication1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Display.cpp">
+    <ClCompile Include="CDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InteractionHandler.cpp">
+    <ClCompile Include="CInteractionHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DrawingLabels.cpp">
+    <ClCompile Include="CDrawingLabels.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Variables.cpp">
+    <ClCompile Include="CRadarDisplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RadarDisplayInterface.cpp">
+    <ClCompile Include="_Variables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CRadarPPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Display.h">
+    <ClInclude Include="CDisplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Variables.h">
+    <ClInclude Include="_Variables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InteractionHandler.h">
+    <ClInclude Include="CInteractionHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DrawingLabels.h">
+    <ClInclude Include="CDrawingLabels.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RadarDisplayInterface.h">
+    <ClInclude Include="IRadarDisplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CRadarDisplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CRadarPPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RadarPPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

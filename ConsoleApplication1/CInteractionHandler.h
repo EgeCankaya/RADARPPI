@@ -1,17 +1,13 @@
 #ifndef INTERACTION_HANDLER_H
 #define INTERACTION_HANDLER_H
 
-#include <GL/freeglut.h>
-#include <string>
+#include "_Variables.h"
 
-#include "Variables.h"
-
-class InteractionHandler {
+class CInteractionHandler {
 public:
- 
-    static InteractionHandler& getInstance();
+    static CInteractionHandler& getInstance();
     void setCallbacks();
-
+    CInteractionHandler();
 private:
     bool isMouseClickInsideBox(float buttonX, float buttonY, float buttonWidth, float buttonHeight);
     void keyboard(unsigned char key, int x, int y);
@@ -35,6 +31,6 @@ private:
     static void reshapeWrapper(int width, int height);
     static void mouseWrapper(int button, int state, int x, int y);
 };
-extern InteractionHandler handler;
+extern CInteractionHandler handler;
 
 #endif // INTERACTION_HANDLER_H

@@ -1,6 +1,12 @@
-#include "DrawingLabels.h"
- 
-void DrawingLabels::renderText(float x, float y, const char* text) {
+#include "CDrawingLabels.h"
+#include <GL/freeglut.h>
+#include <cmath>
+#include "_Variables.h"
+
+CDrawingLabels::CDrawingLabels()
+{}
+
+void CDrawingLabels::renderText(float x, float y, const char* text) {
     glPushMatrix();
     glTranslatef(x, y, 0.0f);
     glScalef(0.0003f, 0.0004f, 1.0f);
@@ -10,14 +16,7 @@ void DrawingLabels::renderText(float x, float y, const char* text) {
     glPopMatrix();
 }
 
- void DrawingLabels::drawString(float x, float y, const char* str) {
-        glRasterPos2f(x, y);
-        while (*str) {
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *str++);
-        }
-    }
-
-void DrawingLabels::drawSeeker() {
+void CDrawingLabels::drawSeeker() {                                  //USABLE
         glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
         glBegin(GL_LINES);
         glVertex2f(0.0f, 0.0f);
@@ -258,7 +257,7 @@ void DrawingLabels::drawSeeker() {
 
     }
 
-void DrawingLabels::drawLinesWithAngles(int gap_in_degrees) {
+void CDrawingLabels::drawLinesWithAngles(int gap_in_degrees) {
     int num_points = static_cast<int>(360.0f / gap_in_degrees);
     float offset;
 
@@ -284,11 +283,11 @@ void DrawingLabels::drawLinesWithAngles(int gap_in_degrees) {
         snprintf(buffer, sizeof(buffer), "%.0f°", angle);
         glColor3f(0.0f, 0.75f, 0.0f);
 
-        if (angle < 90 || angle > 269) {
-            offset = 0.02f;
+        if (angle <= 90 || angle >= 270) {
+            offset = 0.04f;
         }
         else if (angle == 90) {
-            offset = 0.03f;
+            offset = 0.05f;
         }
         else {
             offset = 0.06f;
@@ -301,8 +300,7 @@ void DrawingLabels::drawLinesWithAngles(int gap_in_degrees) {
     }
 }
 
-
-void DrawingLabels::drawCircle(float cx, float cy, float radius, int num_segments) {
+void CDrawingLabels::drawCircle(float cx, float cy, float radius, int num_segments) {
     glBegin(GL_LINE_LOOP);
     for (int i = 0; i < num_segments; i++) {
         float theta = 2.0f * 3.1415926f * float(i) / float(num_segments);
@@ -313,16 +311,17 @@ void DrawingLabels::drawCircle(float cx, float cy, float radius, int num_segment
     glEnd();
 }
 
-void DrawingLabels::drawRangeLabels() {
+void CDrawingLabels::drawRangeLabels() {
     const float radii[] = { 0.30f, 0.60f, 0.90f };
-    const float range_values[] = { outerRange / 3.0f * rangeScale, outerRange * 2.0f / 3.0f * rangeScale, outerRange * rangeScale };
+    outerRange;
+    const float range_values[] = { outerRange / 3.0f, outerRange * 2.0f / 3.0f , outerRange };
 
     for (int i = 0; i < 3; ++i) {
         drawRangeLabel(radii[i], range_values[i]);
     }
 }
 
-void DrawingLabels::drawRangeLabel(float radius, float value) {
+void CDrawingLabels::drawRangeLabel(float radius, float value) {
     char buffer[16];
     snprintf(buffer, sizeof(buffer), "%.0f", value);
 
@@ -334,40 +333,55 @@ void DrawingLabels::drawRangeLabel(float radius, float value) {
     renderText(label_x, label_y, buffer);
 }
 
-void DrawingLabels::drawUnderline() {
+void CDrawingLabels::drawBox() {
     if (isClicked == true) {
-        if (boxID == 0) {
-            glColor3f(0.0f, 1.0f, 0.0f);
-            glBegin(GL_LINES);
-            glVertex2f(-0.05f, 0.70f);
-            glVertex2f(0.08f, 0.70f);
-            glEnd();
-        }
-        if (boxID == 1) {
-            glColor3f(0.0f, 1.0f, 0.0f);
-            glBegin(GL_LINES);
-            glVertex2f(-0.05f, 0.55f);
-            glVertex2f(0.08f, 0.55f);
-            glEnd();
-        }
-        if (boxID == 2) {
-            glColor3f(0.0f, 1.0f, 0.0f);
-            glBegin(GL_LINES);
-            glVertex2f(-0.05f, 0.40f);
-            glVertex2f(0.08f, 0.40f);
-            glEnd();
-        }
-        if (boxID == 3) {
-            glColor3f(0.0f, 1.0f, 0.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.07, 0.25f);
-            glVertex2f(0.32f, 0.25f);
+        int currentTime = glutGet(GLUT_ELAPSED_TIME);
+
+        float blinkSpeed = 500.0f;
+
+        bool isVisible = (currentTime % (int)(2 * blinkSpeed)) < blinkSpeed;
+
+        if (isVisible) {
+            glColor3f(0.0f, 1.0f, 0.0f); 
+
+            float widthStart, widthEnd, heightStart, heightEnd;
+
+            if (boxID == 0) {
+                widthStart = -0.09f;
+                widthEnd = 0.10f;
+                heightStart = 0.80f;
+                heightEnd = heightStart - 0.10f;
+            }
+            else if (boxID == 1) {
+                widthStart = -0.09f;
+                widthEnd = 0.10f;
+                heightStart = 0.65f;
+                heightEnd = heightStart - 0.10f;
+            }
+            else if (boxID == 2) {
+                widthStart = -0.09f;
+                widthEnd = 0.12f;
+                heightStart = 0.50f;
+                heightEnd = heightStart - 0.10f;
+            }
+            else if (boxID == 3) {
+                widthStart = 0.07f;
+                widthEnd = 0.32f;
+                heightStart = 0.35f;
+                heightEnd = heightStart - 0.10f;
+            }
+
+            glBegin(GL_LINE_LOOP);
+            glVertex2f(widthStart, heightStart);
+            glVertex2f(widthEnd, heightStart);  
+            glVertex2f(widthEnd, heightEnd);    
+            glVertex2f(widthStart, heightEnd);  
             glEnd();
         }
     }
 }
 
-void DrawingLabels::renderValues(float x, float y, const char* text) {
+void CDrawingLabels::renderValues(float x, float y, const char* text) {                                 //USABLE
     glPushMatrix();
     glTranslatef(x, y, 0.0f);
     glScalef(0.0003f, 0.0003f, 1.0f);
@@ -377,7 +391,7 @@ void DrawingLabels::renderValues(float x, float y, const char* text) {
     glPopMatrix();
 }
 
-void DrawingLabels::drawCurrentValues() {
+void CDrawingLabels::drawCurrentValues() { 
     char buffer[256];
 
     sprintf_s(buffer, "%d km", heightUplimit);
@@ -386,7 +400,7 @@ void DrawingLabels::drawCurrentValues() {
     sprintf_s(buffer, "%d km", heightLowlimit);
     renderValues(-0.05f, 0.58f, buffer);
 
-    sprintf_s(buffer, "%.0f km", outerRange * rangeScale);
+    sprintf_s(buffer, "%.0f km", outerRange);
     renderValues(-0.05f, 0.43f, buffer);
 
     sprintf_s(buffer, "%d degrees", lineGap);
@@ -403,7 +417,7 @@ void DrawingLabels::drawCurrentValues() {
     }
 }
 
-void DrawingLabels::drawButton(float x, float y, float width, float height, const char* label) {
+void CDrawingLabels::drawButton(float x, float y, float width, float height, const char* label) {                                 //USABLE
 
     glBegin(GL_LINE_LOOP);
     glVertex2f(x, y);
@@ -429,7 +443,7 @@ void DrawingLabels::drawButton(float x, float y, float width, float height, cons
     }
 }
 
-void DrawingLabels::drawButtons() {
+void CDrawingLabels::drawButtons() { 
     if (currentscreen == Screen::Main) {
         drawButton(0.75f, -0.85f, 0.15f, 0.075f, "+");
 
@@ -462,5 +476,5 @@ void DrawingLabels::drawButtons() {
     }
 }
 
-DrawingLabels label;
+CDrawingLabels label;
 
