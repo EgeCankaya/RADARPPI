@@ -1,9 +1,10 @@
+#pragma once
 #ifndef DRAWINGLABELS_H
 #define DRAWINGLABELS_H
-#include "_Variables.h"
+
 class CDrawingLabels {
 public:
-    CDrawingLabels();
+    static CDrawingLabels& getInstance();
 private:
     friend class CDisplay;
     void renderText(float x, float y, const char* text);
@@ -18,6 +19,5 @@ private:
     void drawButton(float x, float y, float width, float height, const char* label);
     void drawButtons();
 };
-extern CDrawingLabels label;
 
 #endif // DRAWINGLABELS_H

@@ -1,12 +1,10 @@
+#pragma once
 #include "IRadarDisplay.h"
-#include "CDisplay.h"         
-#include "CInteractionHandler.h"
 
 class CRadarDisplay : public IRadarDisplay {
 public:
     void run() override;
-    //void addEnemy(float* distance, float* angle, float* height) override;
-    void addEnemy(float distance, float angle, float height) override;
+    void addEnemy(float distance, float angle, float height, bool clockwise) override;
     void updateEnemy() override;
     void endRadarPPI() override;
 

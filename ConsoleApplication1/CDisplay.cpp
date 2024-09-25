@@ -1,8 +1,13 @@
 #include "CDisplay.h"
 #include <cmath>
 #include <GL/freeglut.h>
+#include "_Variables.h"
+#include "CDrawingLabels.h"
 
-CDisplay& CDisplay::getInstance() {
+_Variables* _VarsDisp = _Variables::getInstance();
+CDrawingLabels& label = CDrawingLabels::getInstance();
+
+ CDisplay& CDisplay::getInstance() {
     static CDisplay instance;
     return instance;
 }
@@ -10,25 +15,25 @@ CDisplay& CDisplay::getInstance() {
 void CDisplay::display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (currentscreen == Screen::Main) {
+    if (_VarsDisp->getCurrentScreen() == Screen::Main) {
         glColor3f(0.0f, 0.75f, 0.0f);
         label.drawCircle(0.0f, 0.0f, 0.90f, 100);
         label.drawCircle(0.0f, 0.0f, 0.30f, 100);
         label.drawCircle(0.0f, 0.0f, 0.60f, 100);
-        label.drawLinesWithAngles(lineGap);
+        label.drawLinesWithAngles(_VarsDisp->getLineGap());
         label.drawRangeLabels();
         label.drawButtons();
         enemyHighlight();
 
         glPushMatrix();
         glTranslatef(0.0f, 0.0f, 0.0f);
-        glRotatef(angle, 0.0f, 0.0f, -1.0f);
+        glRotatef(_VarsDisp->getAngle(), 0.0f, 0.0f, -1.0f);
         glTranslatef(0.0f, 0.0f, 0.0f);
         glColor3f(0.0f, 0.75f, 0.0f);
         label.drawSeeker();
         glPopMatrix();
     }
-    else if (currentscreen == Screen::Settings) {
+    else if (_VarsDisp->getCurrentScreen() == Screen::Settings) {
         glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
         label.drawButtons();
         label.drawCurrentValues();
@@ -42,26 +47,32 @@ CDisplay::~CDisplay() {
     delete[] enemies; 
 }
 
-    void CDisplay::enemyWrapper(float distance, float angle, float height) {
-        getInstance().addEnemy(distance, angle, height);
+    void CDisplay::enemyWrapper(float distance, float angle, float height, bool clockwiseCheck) {
+        getInstance().addEnemy(distance, angle, height, clockwiseCheck);
     }
 
-    void CDisplay::addEnemy(float distance, float angle, float height) {
+    void CDisplay::addEnemy(float distance, float angle, float height, bool clockwiseCheck) {
         if (enemyCount == enemyCapacity) {
             expandEnemyArray();
         }
-
+        _VarsDisp->setClockwise(clockwiseCheck);
         enemies[enemyCount].realDistance = distance;
         enemies[enemyCount].angle = angle;
         enemies[enemyCount].height = height;
-        // Initialize other fields...
         enemies[enemyCount].distance = 0.0f;
         enemies[enemyCount].realDist = 0.0f;
         enemies[enemyCount].x = 0.0f;
         enemies[enemyCount].y = 0.0f;
+        enemies[enemyCount].lastX = 0.0f;
+        enemies[enemyCount].lastY = 0.0f;
+        enemies[enemyCount].hX = 0.0f;
+        enemies[enemyCount].hY = 0.0f;
+        enemies[enemyCount].lastDetectionTime = false;
         enemies[enemyCount].isHighlighted = false;
         enemies[enemyCount].visited = false;
+        enemies[enemyCount].once = false;
         enemies[enemyCount].fadeAlpha = 1.0f;
+        enemies[enemyCount].visited = false;
         enemyCount++;
     }
 
@@ -80,20 +91,20 @@ CDisplay::~CDisplay() {
     void CDisplay::enemyHighlight() {
         for (int i = 0; i < enemyCount; ++i) {
             Enemy& enemy = enemies[i];
-            if (enemy.height < heightLowlimit || enemy.height > heightUplimit) {
+            if (enemy.height < _VarsDisp->getHeightLowlimit() || enemy.height > _VarsDisp->getHeightUplimit()) {
                 continue;
             }
 
             if (!enemy.isHighlighted) {
-                enemy.distance = 0.90f / (outerRange / enemy.realDistance);
+                enemy.distance = 0.90f / (_VarsDisp->getOuterRange() / enemy.realDistance);
                 enemy.realDist = enemy.realDistance;
-                enemy.x = enemy.distance * cosf(enemy.angle * M_PI / 180.0f) / rangeScale;
-                enemy.y = enemy.distance * -sinf(enemy.angle * M_PI / 180.0f) / rangeScale;
+                enemy.x = enemy.distance * cosf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
+                enemy.y = enemy.distance * -sinf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
             }
 
             const float angleTolerance = 2.0f;
 
-            if (fabs(angle - enemy.angle) < angleTolerance && !enemy.visited) {
+            if (fabs(_VarsDisp->getAngle() - enemy.angle) < angleTolerance && !enemy.visited) {
                 enemy.lastDetectionTime = glutGet(GLUT_ELAPSED_TIME);
                 enemy.isHighlighted = true;
                 enemy.once = true;
@@ -101,7 +112,7 @@ CDisplay::~CDisplay() {
                 enemy.visited = true;
             }
 
-            if (enemy.isHighlighted && ((mousePosX > enemy.x - 0.02f) && (mousePosX < enemy.x + 0.02f) && (mousePosY > enemy.y - 0.02f) && (mousePosY < enemy.y + 0.02f))) {
+            if (enemy.isHighlighted && ((_VarsDisp->getMousePosX() > enemy.x - 0.02f) && (_VarsDisp->getMousePosX() < enemy.x + 0.02f) && (_VarsDisp->getMousePosY() > enemy.y - 0.02f) && (_VarsDisp->getMousePosY() < enemy.y + 0.02f))) {
                 glColor3f(0.0f, 1.0f, 0.0f);
                 char buffer[256];
                 sprintf_s(buffer, "h:%.0fkm ", enemy.height);
@@ -124,8 +135,8 @@ CDisplay::~CDisplay() {
                 }
 
                 if (enemy.fadeAlpha < 0.05f) {
-                    removeEnemy(i); // Remove the enemy if faded out
-                    --i;            // Adjust the index after removal
+                    removeEnemy(i);
+                    --i;            
                 }
             }
         }
@@ -140,17 +151,17 @@ CDisplay::~CDisplay() {
 
     float CDisplay::findClosestEnemyAngle() {
         float minAngleDiff = 360.0f;
-        float closestEnemyAngle = angle;
+        float closestEnemyAngle = _VarsDisp->getAngle();
 
         for (int i = 0; i < enemyCount; ++i) {
             Enemy& enemy = enemies[i];
 
-            if (enemy.height < heightLowlimit || enemy.height > heightUplimit || enemy.visited) {
+            if (enemy.height < _VarsDisp->getHeightLowlimit() || enemy.height > _VarsDisp->getHeightUplimit() || enemy.visited) {
                 continue;
             }
 
             float enemyAngle = enemy.angle;
-            float angleDiff = fabsf(angle - enemyAngle);
+            float angleDiff = fabsf(_VarsDisp->getAngle() - enemyAngle);
 
             if (angleDiff > 180.0f) {
                 angleDiff = 360.0f - angleDiff;
@@ -161,14 +172,13 @@ CDisplay::~CDisplay() {
                 closestEnemyAngle = enemyAngle;
             }
         }
-
         return closestEnemyAngle;
     }
 
 
     void CDisplay::updateAngle() {
         float targetAngle = findClosestEnemyAngle();
-        float angleDiff = targetAngle - angle;
+        float angleDiff = targetAngle - _VarsDisp->getAngle();
 
         if (angleDiff > 180.0f) {
             angleDiff -= 360.0f;
@@ -178,24 +188,18 @@ CDisplay::~CDisplay() {
         }
 
         if (fabs(angleDiff) > 1.0f) {
-            if (angleDiff > 0) {
-                clockwise = true;
-            }
-            else {
-                clockwise = false;
-            }
 
-            if (clockwise) {
-                angle += 1.0f;
+            if (_VarsDisp->getClockwise()) {
+                _VarsDisp->addToAngle(1.0f);
             }
             else {
-                angle -= 1.0f;
+                _VarsDisp->addToAngle(-1.0f);
             }
         }
 
-        angle = fmod(angle, 360.0f);
-        if (angle < 0) {
-            angle += 360.0f;
+        _VarsDisp->setAngle(fmod(_VarsDisp->getAngle(), 360.0f));
+        if (_VarsDisp->getAngle() < 0) {
+            _VarsDisp->addToAngle(360.0f);
         }
 
         glutPostRedisplay();
@@ -203,7 +207,7 @@ CDisplay::~CDisplay() {
     }
 
     void CDisplay::setOuterRange(float range) {
-        outerRange = range;
+        _VarsDisp->setOuterRange(range);
     }
 
    void CDisplay::timerWrapper(int value) {
@@ -219,5 +223,3 @@ CDisplay::~CDisplay() {
         glutTimerFunc(0, timerWrapper, 0);
         glutDisplayFunc(displayWrapper);
     }
-
-   CDisplay radar;

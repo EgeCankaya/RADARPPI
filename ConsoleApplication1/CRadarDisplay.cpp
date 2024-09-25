@@ -1,6 +1,12 @@
 #include "CRadarDisplay.h"
 #include <GL/freeglut.h>
 #include "_Variables.h"
+#include "CDisplay.h"         
+#include "CInteractionHandler.h"
+
+_Variables* _VarsUserDef = _Variables::getInstance();
+CDisplay& display = CDisplay::getInstance();
+CInteractionHandler& interactionHandler = CInteractionHandler::getInstance();
 
 void CRadarDisplay::run() {
     int argc = 1;    char* argv[1] = { (char*)"RadarDisplay" };
@@ -10,12 +16,12 @@ void CRadarDisplay::run() {
     glutInitWindowPosition(100, 100);
     glutCreateWindow("Radar PPI");
     
-    radar.setCallbacks();
-    handler.setCallbacks();
+    display.setCallbacks();
+    interactionHandler.setCallbacks();
 }
 
-void CRadarDisplay::addEnemy(float distance, float angle, float height) {
-    radar.enemyWrapper(distance, angle, height);
+void CRadarDisplay::addEnemy(float distance, float angle, float height, bool clockwise) {
+    display.enemyWrapper(distance, angle, height, clockwise);
 }
 
 void CRadarDisplay::updateEnemy() {
@@ -28,99 +34,94 @@ void CRadarDisplay::endRadarPPI() {
 
 void CRadarDisplay::setHeightUplimit(int limit) {
     if (limit >= 0) {
-        heightUplimit = limit;
+        _VarsUserDef->setHeightUplimit(limit);
     }
 }
 
 int CRadarDisplay::getHeightUplimit() const {
-    return heightUplimit;
+    return _VarsUserDef->getHeightUplimit();
 }
 
 void CRadarDisplay::setHeightLowlimit(int limit) {
-    if (limit >= 0 && limit <= heightUplimit) { 
-        heightLowlimit = limit;
+    if (limit >= 0 && limit <= _VarsUserDef->getHeightUplimit()) {
+        _VarsUserDef->setHeightLowlimit(limit);
     }
 }
 
 int CRadarDisplay::getHeightLowlimit() const {
-    return heightLowlimit;
+    return _VarsUserDef->getHeightLowlimit();
 }
 
 void CRadarDisplay::setMaxRange(int range) {
     if (range > 0) {
-        maxRange = range;
+        _VarsUserDef->setMaxRange(range);
     }
 }
 
 int CRadarDisplay::getMaxRange() const {
-    return maxRange;
+    return _VarsUserDef->getMaxRange();
 }
 
 void CRadarDisplay::setOuterRange(float range) {
-    if (range > 0 && range <= maxRange) {
-        outerRange = range;
-    }
-    else {
-        outerRange = maxRange;  
-    }
+    _VarsUserDef->setOuterRange(range);
 }
 
 float CRadarDisplay::getOuterRange() const {
-    return outerRange;
+    return _VarsUserDef->getOuterRange();
 }
 
 void CRadarDisplay::setLineGap(int gap) {
     if (gap >= 0) {
-        lineGap = gap;
+        _VarsUserDef->setLineGap(gap);
     }
 }
 
 int CRadarDisplay::getLineGap() const {
-    return lineGap;
+    return _VarsUserDef->getLineGap();
 }
 
 void CRadarDisplay::setRangeScale(float scale) {
     if (scale > 0) {
-        rangeScale = scale;
+        _VarsUserDef->setRangeScale(scale);
     }
 }
 
 float CRadarDisplay::getRangeScale() const {
-    return rangeScale;
+    return _VarsUserDef->getRangeScale();
 }
 
 void CRadarDisplay::setClockwise(bool direction) {
-    clockwise = direction;
+    _VarsUserDef->setClockwise(direction);
 }
 
 bool CRadarDisplay::getClockwise() const {
-    return clockwise;
+    return _VarsUserDef->getClockwise();
 }
 
 void CRadarDisplay::setAngle(float a) {
-    angle = a;
+    _VarsUserDef->setAngle(a);
 }
 
 float CRadarDisplay::getAngle() const {
-    return angle;
+    return _VarsUserDef->getAngle();
 }
 
 void CRadarDisplay::setHighlightDuration(int duration) {
     if (duration >= 0) {
-        highlightDuration = duration;
+        _VarsUserDef->setHighlightDuration(duration);
     }
 }
 
 int CRadarDisplay::getHighlightDuration() const {
-    return highlightDuration;
+    return _VarsUserDef->getHighlightDuration();
 }
 
 void CRadarDisplay::setLastDetectionTime(int time) {
     if (time >= 0) {
-        lastDetectionTime = time;
+        _VarsUserDef->setLastDetectionTime(time);
     }
 }
 
 int CRadarDisplay::getLastDetectionTime() const {
-    return lastDetectionTime;
+    return _VarsUserDef->getLastDetectionTime();
 }

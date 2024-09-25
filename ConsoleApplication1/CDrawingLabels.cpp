@@ -3,8 +3,12 @@
 #include <cmath>
 #include "_Variables.h"
 
-CDrawingLabels::CDrawingLabels()
-{}
+_Variables* _VarsLabel = _Variables::getInstance();
+
+CDrawingLabels& CDrawingLabels::getInstance() {
+    static CDrawingLabels instance;
+    return instance;
+}
 
 void CDrawingLabels::renderText(float x, float y, const char* text) {
     glPushMatrix();
@@ -16,14 +20,14 @@ void CDrawingLabels::renderText(float x, float y, const char* text) {
     glPopMatrix();
 }
 
-void CDrawingLabels::drawSeeker() {                                  //USABLE
+void CDrawingLabels::drawSeeker() {
         glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
         glBegin(GL_LINES);
         glVertex2f(0.0f, 0.0f);
         glVertex2f(0.90f, 0.0f);
         glEnd();
 
-        if (clockwise) {
+        if (_VarsLabel->getClockwise()) {
             glColor4f(0.0f, 0.95f, 0.0f, 1.0f);
             glBegin(GL_LINES);
             glVertex2f(0.0f, 0.0f);
@@ -313,8 +317,8 @@ void CDrawingLabels::drawCircle(float cx, float cy, float radius, int num_segmen
 
 void CDrawingLabels::drawRangeLabels() {
     const float radii[] = { 0.30f, 0.60f, 0.90f };
-    outerRange;
-    const float range_values[] = { outerRange / 3.0f, outerRange * 2.0f / 3.0f , outerRange };
+    //outerRange;
+    const float range_values[] = { _VarsLabel->getOuterRange() / 3.0f, _VarsLabel->getOuterRange() * 2.0f / 3.0f , _VarsLabel->getOuterRange() };
 
     for (int i = 0; i < 3; ++i) {
         drawRangeLabel(radii[i], range_values[i]);
@@ -334,7 +338,7 @@ void CDrawingLabels::drawRangeLabel(float radius, float value) {
 }
 
 void CDrawingLabels::drawBox() {
-    if (isClicked == true) {
+    if (_VarsLabel->getIsClicked() == true) {
         int currentTime = glutGet(GLUT_ELAPSED_TIME);
 
         float blinkSpeed = 500.0f;
@@ -346,25 +350,25 @@ void CDrawingLabels::drawBox() {
 
             float widthStart, widthEnd, heightStart, heightEnd;
 
-            if (boxID == 0) {
+            if (_VarsLabel->getBoxID() == 0) {
                 widthStart = -0.09f;
                 widthEnd = 0.10f;
                 heightStart = 0.80f;
                 heightEnd = heightStart - 0.10f;
             }
-            else if (boxID == 1) {
+            else if (_VarsLabel->getBoxID() == 1) {
                 widthStart = -0.09f;
                 widthEnd = 0.10f;
                 heightStart = 0.65f;
                 heightEnd = heightStart - 0.10f;
             }
-            else if (boxID == 2) {
+            else if (_VarsLabel->getBoxID() == 2) {
                 widthStart = -0.09f;
                 widthEnd = 0.12f;
                 heightStart = 0.50f;
                 heightEnd = heightStart - 0.10f;
             }
-            else if (boxID == 3) {
+            else if (_VarsLabel->getBoxID() == 3) {
                 widthStart = 0.07f;
                 widthEnd = 0.32f;
                 heightStart = 0.35f;
@@ -394,19 +398,19 @@ void CDrawingLabels::renderValues(float x, float y, const char* text) {         
 void CDrawingLabels::drawCurrentValues() { 
     char buffer[256];
 
-    sprintf_s(buffer, "%d km", heightUplimit);
+    sprintf_s(buffer, "%d km", _VarsLabel->getHeightUplimit());
     renderValues(-0.05f, 0.73f, buffer);
 
-    sprintf_s(buffer, "%d km", heightLowlimit);
+    sprintf_s(buffer, "%d km", _VarsLabel->getHeightLowlimit());
     renderValues(-0.05f, 0.58f, buffer);
 
-    sprintf_s(buffer, "%.0f km", outerRange);
+    sprintf_s(buffer, "%.0f km", _VarsLabel->getOuterRange());
     renderValues(-0.05f, 0.43f, buffer);
 
-    sprintf_s(buffer, "%d degrees", lineGap);
+    sprintf_s(buffer, "%d degrees", _VarsLabel->getLineGap());
     renderValues(0.08f, 0.28f, buffer);
 
-    if (clockwise) {
+    if (_VarsLabel->getClockwise()) {
         sprintf_s(buffer, "Clockwise");
         renderValues(-0.15f, 0.13f, buffer);
     }
@@ -444,14 +448,14 @@ void CDrawingLabels::drawButton(float x, float y, float width, float height, con
 }
 
 void CDrawingLabels::drawButtons() { 
-    if (currentscreen == Screen::Main) {
+    if (_VarsLabel->getCurrentScreen() == Screen::Main) {
         drawButton(0.75f, -0.85f, 0.15f, 0.075f, "+");
 
         drawButton(0.60f, -0.85f, 0.15f, 0.075f, "-");
 
         drawButton(-0.95f, 0.85f, 0.25f, 0.1f, "Settings");
     }
-    else if (currentscreen == Screen::Settings) {
+    else if (_VarsLabel->getCurrentScreen() == Screen::Settings) {
         drawButton(-0.95f, 0.85f, 0.25f, 0.1f, "Settings");
 
         drawButton(-0.7f, 0.7f, 0.30f, 0.1f, "Height Max");
@@ -476,5 +480,4 @@ void CDrawingLabels::drawButtons() {
     }
 }
 
-CDrawingLabels label;
 

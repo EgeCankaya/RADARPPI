@@ -1,13 +1,11 @@
+#pragma once
 #ifndef INTERACTION_HANDLER_H
 #define INTERACTION_HANDLER_H
 
-#include "_Variables.h"
-
 class CInteractionHandler {
 public:
-    static CInteractionHandler& getInstance();
     void setCallbacks();
-    CInteractionHandler();
+    static CInteractionHandler& getInstance();
 private:
     bool isMouseClickInsideBox(float buttonX, float buttonY, float buttonWidth, float buttonHeight);
     void keyboard(unsigned char key, int x, int y);
@@ -31,6 +29,5 @@ private:
     static void reshapeWrapper(int width, int height);
     static void mouseWrapper(int button, int state, int x, int y);
 };
-extern CInteractionHandler handler;
 
 #endif // INTERACTION_HANDLER_H

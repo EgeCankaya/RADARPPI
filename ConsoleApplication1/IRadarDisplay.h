@@ -1,10 +1,11 @@
+#pragma once
 #ifndef IRADARDISPLAY_H
 #define IRADARDISPLAY_H
 
 class IRadarDisplay {
 public:
     virtual void run() = 0;
-    virtual void addEnemy(float distance, float angle, float height) = 0;
+    virtual void addEnemy(float distance, float angle, float height, bool clockwise) = 0;
 
     virtual void updateEnemy() = 0;
     virtual void endRadarPPI() = 0;
@@ -36,9 +37,6 @@ public:
     
     virtual void setHighlightDuration(int duration) = 0;
     virtual int getHighlightDuration() const = 0;
-     
-    virtual void setLastDetectionTime(int time) = 0;
-    virtual int getLastDetectionTime() const = 0;
 };
 
 #endif // IRADARDISPLAY_H
