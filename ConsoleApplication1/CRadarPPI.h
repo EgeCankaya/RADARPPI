@@ -19,17 +19,11 @@ public:
     void setHeightLowlimit(int limit);
     int getHeightLowlimit() const;
 
-    void setMaxRange(int range);
-    int getMaxRange() const;
-
     void setOuterRange(float range);
     float getOuterRange() const;
 
     void setLineGap(int gap);
     int getLineGap() const;
-
-    void setRangeScale(float scale);
-    float getRangeScale() const;
 
     void setClockwise(bool direction);
     bool getClockwise() const;

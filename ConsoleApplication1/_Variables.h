@@ -20,9 +20,8 @@ private:
     int boxID;
 
     int heightUplimit, heightLowlimit;
-    int maxRange;
     float outerRange;
-    int lineGap;
+    float lineGap;
     float rangeScale;
     bool clockwise;
     float angle;
@@ -72,16 +71,13 @@ public:
     void setHeightLowlimit(int limit);
     void addToHeightLowlimit(int limit);
 
-    int getMaxRange() const;
-    void setMaxRange(int range);
-
     float getOuterRange() const;
     void setOuterRange(float range);
     void addToOuterRange(float range);
 
-    int getLineGap() const;
-    void setLineGap(int gap);
-    void addToLineGap(int gap);
+    float getLineGap() const;
+    void setLineGap(float gap);
+    void addToLineGap(float gap);
 
     float getRangeScale() const;
     void setRangeScale(float scale);

@@ -14,17 +14,11 @@ public:
     void setHeightLowlimit(int limit)  override;
     int getHeightLowlimit() const  override;
 
-    void setMaxRange(int range)  override;
-    int getMaxRange() const  override;
-
     void setOuterRange(float range)  override;
     float getOuterRange() const  override;
 
     void setLineGap(int gap)  override;
     int getLineGap() const  override;
-
-    void setRangeScale(float scale)  override;
-    float getRangeScale() const  override;
 
     void setClockwise(bool direction)  override;
     bool getClockwise() const  override;
@@ -34,9 +28,5 @@ public:
 
     void setHighlightDuration(int duration)  override;
     int getHighlightDuration() const  override;
-
-    void setLastDetectionTime(int time)  override;
-    int getLastDetectionTime() const  override;
-
       
 };

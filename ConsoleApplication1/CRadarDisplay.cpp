@@ -52,16 +52,6 @@ int CRadarDisplay::getHeightLowlimit() const {
     return _VarsUserDef->getHeightLowlimit();
 }
 
-void CRadarDisplay::setMaxRange(int range) {
-    if (range > 0) {
-        _VarsUserDef->setMaxRange(range);
-    }
-}
-
-int CRadarDisplay::getMaxRange() const {
-    return _VarsUserDef->getMaxRange();
-}
-
 void CRadarDisplay::setOuterRange(float range) {
     _VarsUserDef->setOuterRange(range);
 }
@@ -78,16 +68,6 @@ void CRadarDisplay::setLineGap(int gap) {
 
 int CRadarDisplay::getLineGap() const {
     return _VarsUserDef->getLineGap();
-}
-
-void CRadarDisplay::setRangeScale(float scale) {
-    if (scale > 0) {
-        _VarsUserDef->setRangeScale(scale);
-    }
-}
-
-float CRadarDisplay::getRangeScale() const {
-    return _VarsUserDef->getRangeScale();
 }
 
 void CRadarDisplay::setClockwise(bool direction) {
@@ -114,14 +94,4 @@ void CRadarDisplay::setHighlightDuration(int duration) {
 
 int CRadarDisplay::getHighlightDuration() const {
     return _VarsUserDef->getHighlightDuration();
-}
-
-void CRadarDisplay::setLastDetectionTime(int time) {
-    if (time >= 0) {
-        _VarsUserDef->setLastDetectionTime(time);
-    }
-}
-
-int CRadarDisplay::getLastDetectionTime() const {
-    return _VarsUserDef->getLastDetectionTime();
 }

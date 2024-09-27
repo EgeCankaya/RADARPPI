@@ -4,9 +4,9 @@ _Variables* _Variables::instance = nullptr;
 
 _Variables::_Variables()
     : mousePosX(0), mousePosY(0), isClicked(false), boxID(0),
-    heightUplimit(30), heightLowlimit(0), maxRange(300),
+    heightUplimit(30), heightLowlimit(0),
     outerRange(300.0f), lineGap(30), rangeScale(1.0f), clockwise(true),
-    angle(0.0f), highlightDuration(10000), lastDetectionTime(0),
+    angle(0.0f), highlightDuration(10), lastDetectionTime(0),
     xleft(-1.0f), xright(1.0f), bottom(-1.0f), top(1.0f),
     currentscreen(Screen::Main) {}
 
@@ -42,16 +42,13 @@ int _Variables::getHeightLowlimit() const { return heightLowlimit; }
 void _Variables::setHeightLowlimit(int limit) { heightLowlimit = limit; }
 void _Variables::addToHeightLowlimit(int limit) { heightLowlimit += limit; }
 
-int _Variables::getMaxRange() const { return maxRange; }
-void _Variables::setMaxRange(int range) { maxRange = range; }
-
 float _Variables::getOuterRange() const { return outerRange; }
 void _Variables::setOuterRange(float range) { outerRange = range; }
 void _Variables::addToOuterRange(float range) { outerRange += range; }
 
-int _Variables::getLineGap() const { return lineGap; }
-void _Variables::setLineGap(int gap) { lineGap = gap; }
-void _Variables::addToLineGap(int gap) { lineGap += gap; }
+float _Variables::getLineGap() const { return lineGap; }
+void _Variables::setLineGap(float gap) { lineGap = gap; }
+void _Variables::addToLineGap(float gap) { lineGap += gap; }
 
 float _Variables::getRangeScale() const { return rangeScale; }
 void _Variables::setRangeScale(float scale) { rangeScale = scale; }

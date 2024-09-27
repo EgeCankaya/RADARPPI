@@ -21,249 +21,28 @@ void CDrawingLabels::renderText(float x, float y, const char* text) {
 }
 
 void CDrawingLabels::drawSeeker() {
-        glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+    glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+    glBegin(GL_LINES);
+    glVertex2f(0.0f, 0.0f);
+    glVertex2f(0.90f, 0.0f);
+    glEnd();
+
+    float increment = (_VarsLabel->getClockwise()) ? 0.01f : -0.01f;
+    for (float i = 0.95f, x = 0.89f, y = increment; i >= 0.05f; i -= 0.05f, x -= 0.01f, y += increment) {
+        glColor4f(0.0f, i, 0.0f, 1.0f);
         glBegin(GL_LINES);
         glVertex2f(0.0f, 0.0f);
-        glVertex2f(0.90f, 0.0f);
+        glVertex2f(x, y);
         glEnd();
+    }
 
-        if (_VarsLabel->getClockwise()) {
-            glColor4f(0.0f, 0.95f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.89f, 0.01f);
-            glEnd();
-
-            glColor4f(0.0f, 0.90f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.88f, 0.02f);
-            glEnd();
-
-            glColor4f(0.0f, 0.85f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.87f, 0.03f);
-            glEnd();
-
-            glColor4f(0.0f, 0.80f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.86f, 0.04f);
-            glEnd();
-
-            glColor4f(0.0f, 0.75f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.85f, 0.05f);
-            glEnd();
-
-            glColor4f(0.0f, 0.70f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.84f, 0.06f);
-            glEnd();
-
-            glColor4f(0.0f, 0.65f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.83f, 0.07f);
-            glEnd();
-
-            glColor4f(0.0f, 0.60f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.82f, 0.08f);
-            glEnd();
-
-            glColor4f(0.0f, 0.55f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.81f, 0.09f);
-            glEnd();
-
-            glColor4f(0.0f, 0.50f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.80f, 0.10f);
-            glEnd();
-
-            glColor4f(0.0f, 0.45f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.79f, 0.11f);
-            glEnd();
-
-            glColor4f(0.0f, 0.40f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.78f, 0.12f);
-            glEnd();
-
-            glColor4f(0.0f, 0.35f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.77f, 0.13f);
-            glEnd();
-
-            glColor4f(0.0f, 0.30f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.76f, 0.14f);
-            glEnd();
-
-            glColor4f(0.0f, 0.25f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.75f, 0.15f);
-            glEnd();
-
-            glColor4f(0.0f, 0.20f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.74f, 0.16f);
-            glEnd();
-
-            glColor4f(0.0f, 0.15f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.73f, 0.17f);
-            glEnd();
-
-            glColor4f(0.0f, 0.10f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.72f, 0.18f);
-            glEnd();
-
-            glColor4f(0.0f, 0.05f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.71f, 0.19f);
-            glEnd();
-        }
-
-        else {
-            glColor4f(0.0f, 0.95f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.89f, -0.01f);
-            glEnd();
-
-            glColor4f(0.0f, 0.90f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.88f, -0.02f);
-            glEnd();
-
-            glColor4f(0.0f, 0.85f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.87f, -0.03f);
-            glEnd();
-
-            glColor4f(0.0f, 0.80f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.86f, -0.04f);
-            glEnd();
-
-            glColor4f(0.0f, 0.75f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.85f, -0.05f);
-            glEnd();
-
-            glColor4f(0.0f, 0.70f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.84f, -0.06f);
-            glEnd();
-
-            glColor4f(0.0f, 0.65f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.83f, -0.07f);
-            glEnd();
-
-            glColor4f(0.0f, 0.60f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.82f, -0.08f);
-            glEnd();
-
-            glColor4f(0.0f, 0.55f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.81f, -0.09f);
-            glEnd();
-
-            glColor4f(0.0f, 0.50f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.80f, -0.10f);
-            glEnd();
-
-            glColor4f(0.0f, 0.45f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.79f, -0.11f);
-            glEnd();
-
-            glColor4f(0.0f, 0.40f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.78f, -0.12f);
-            glEnd();
-
-            glColor4f(0.0f, 0.35f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.77f, -0.13f);
-            glEnd();
-
-            glColor4f(0.0f, 0.30f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.76f, -0.14f);
-            glEnd();
-
-            glColor4f(0.0f, 0.25f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.75f, -0.15f);
-            glEnd();
-
-            glColor4f(0.0f, 0.20f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.74f, -0.16f);
-            glEnd();
-
-            glColor4f(0.0f, 0.15f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.73f, -0.17f);
-            glEnd();
-
-            glColor4f(0.0f, 0.10f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.72f, -0.18f);
-            glEnd();
-
-            glColor4f(0.0f, 0.05f, 0.0f, 1.0f);
-            glBegin(GL_LINES);
-            glVertex2f(0.0f, 0.0f);
-            glVertex2f(0.71f, -0.19f);
-            glEnd();
-        }
 
     }
 
 void CDrawingLabels::drawLinesWithAngles(int gap_in_degrees) {
     int num_points = static_cast<int>(360.0f / gap_in_degrees);
-    float offset;
+    float offsetX = 0.0f;
+    float offsetY = 0.0f;
 
     glBegin(GL_LINES);
     for (int i = 0; i < num_points; i++) {
@@ -287,18 +66,28 @@ void CDrawingLabels::drawLinesWithAngles(int gap_in_degrees) {
         snprintf(buffer, sizeof(buffer), "%.0f°", angle);
         glColor3f(0.0f, 0.75f, 0.0f);
 
-        if (angle <= 90 || angle >= 270) {
-            offset = 0.04f;
-        }
-        else if (angle == 90) {
-            offset = 0.05f;
-        }
-        else {
-            offset = 0.06f;
+        if (angle <= 90 && angle >= 0) {
+            offsetX = 0.03f;
+            offsetY = 0.06f;
         }
 
-        float label_x = x + offset * cosf(-angle_radians);
-        float label_y = y + offset * sinf(-angle_radians);
+        else if (angle < 180 && angle > 90) {
+            offsetX = 0.08f;
+            offsetY = 0.08f;
+        }
+
+        else if (angle <= 270 && angle >= 180) {
+            offsetX = 0.08f;
+            offsetY = 0.04f;
+        }
+
+        else if (angle < 360 && angle > 270) {
+            offsetX = 0.03f;
+            offsetY = 0.03f;
+        }
+
+        float label_x = x + offsetX * cosf(-angle_radians);
+        float label_y = y + offsetY * sinf(-angle_radians);
 
         renderText(label_x, label_y, buffer);
     }
@@ -348,7 +137,7 @@ void CDrawingLabels::drawBox() {
         if (isVisible) {
             glColor3f(0.0f, 1.0f, 0.0f); 
 
-            float widthStart, widthEnd, heightStart, heightEnd;
+            float widthStart = 0.0f, widthEnd = 0.0f, heightStart = 0.0f, heightEnd = 0.0f;
 
             if (_VarsLabel->getBoxID() == 0) {
                 widthStart = -0.09f;
@@ -374,7 +163,6 @@ void CDrawingLabels::drawBox() {
                 heightStart = 0.35f;
                 heightEnd = heightStart - 0.10f;
             }
-
             glBegin(GL_LINE_LOOP);
             glVertex2f(widthStart, heightStart);
             glVertex2f(widthEnd, heightStart);  
@@ -407,18 +195,8 @@ void CDrawingLabels::drawCurrentValues() {
     sprintf_s(buffer, "%.0f km", _VarsLabel->getOuterRange());
     renderValues(-0.05f, 0.43f, buffer);
 
-    sprintf_s(buffer, "%d degrees", _VarsLabel->getLineGap());
+    sprintf_s(buffer, "%.0f degrees", _VarsLabel->getLineGap());
     renderValues(0.08f, 0.28f, buffer);
-
-    if (_VarsLabel->getClockwise()) {
-        sprintf_s(buffer, "Clockwise");
-        renderValues(-0.15f, 0.13f, buffer);
-    }
-
-    else {
-        sprintf_s(buffer, "Counter Clockwise");
-        renderValues(-0.15f, 0.13f, buffer);
-    }
 }
 
 void CDrawingLabels::drawButton(float x, float y, float width, float height, const char* label) {                                 //USABLE
@@ -436,10 +214,6 @@ void CDrawingLabels::drawButton(float x, float y, float width, float height, con
 
     else if (label == "Degree Between Lines") {
         renderText(x + width / 2 - 0.22, y + height / 2 - 0.01f, label);
-    }
-
-    else if (label == "Change Seeker Rotation") {
-        renderText(x + width / 2 - 0.25, y + height / 2 - 0.01f, label);
     }
 
     else {
@@ -474,9 +248,6 @@ void CDrawingLabels::drawButtons() {
 
         drawButton(-0.20f, 0.25f, 0.13f, 0.1f, "-");
         drawButton(-0.07f, 0.25f, 0.13f, 0.1f, "+");
-
-        drawButton(-0.70f, 0.10f, 0.52f, 0.1f, "Change Seeker Rotation");
-
     }
 }
 

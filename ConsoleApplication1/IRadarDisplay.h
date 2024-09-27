@@ -16,18 +16,12 @@ public:
 
     virtual void setHeightLowlimit(int limit) = 0;
     virtual int getHeightLowlimit() const = 0;
-
-    virtual void setMaxRange(int range) = 0;
-    virtual int getMaxRange() const = 0;
  
     virtual void setOuterRange(float range) = 0;
     virtual float getOuterRange() const = 0;
 
     virtual void setLineGap(int gap) = 0;
     virtual int getLineGap() const = 0;
-  
-    virtual void setRangeScale(float scale) = 0;
-    virtual float getRangeScale() const = 0;
    
     virtual void setClockwise(bool direction) = 0;
     virtual bool getClockwise() const = 0;

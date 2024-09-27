@@ -16,7 +16,6 @@ private:
         float angle;
         float height;
         float distance;
-        float realDist;
         float x;
         float y;
         float lastX;
@@ -28,6 +27,8 @@ private:
         bool isHighlighted;
         bool visited;
         float fadeAlpha;
+        float highlightedRange;
+        bool changedRange;
     };
 
     Enemy* enemies;        
@@ -43,9 +44,8 @@ private:
     static void timerWrapper(int value);
     static void displayWrapper();
     void addEnemy(float distance, float angle, float height, bool clockwise);
-    //void addEnemy(float* distance, float* angle, float* height);
     float findClosestEnemyAngle();
-    void expandEnemyArray(); // New function to expand the dynamic array
+    void expandEnemyArray();
     void removeEnemy(int index);
 };
 

@@ -1,7 +1,6 @@
 #include "CInteractionHandler.h"
 #include <GL/freeglut.h>
 #include <string>
-#include <iostream>
 #include "_Variables.h"
 
 _Variables* _VarsHandler = _Variables::getInstance();
@@ -44,12 +43,9 @@ void CInteractionHandler::keyboard(unsigned char key, int x, int y) {
                     }
                 }
                 else if (_VarsHandler->getBoxID() == 2) {
-                    if (number > _VarsHandler->getMaxRange()) {
-                        _VarsHandler->setOuterRange(_VarsHandler->getMaxRange());
-                    }
-                    else {
-                        _VarsHandler->setOuterRange(static_cast<float>(number));
-                    }
+
+                    _VarsHandler->setOuterRange(static_cast<float>(number));
+
                 }
                 else if (_VarsHandler->getBoxID() == 3) {
                     _VarsHandler->setLineGap(static_cast<float>(number));
@@ -250,13 +246,15 @@ void CInteractionHandler::decreaseHeightLow() {
     _VarsHandler->addToHeightLowlimit(-5.0f);
 }
 
-void CInteractionHandler::decreaseLineGap() {
+void CInteractionHandler::increaseLineGap() {
     _VarsHandler->addToLineGap(15.0f);
 }
 
-void CInteractionHandler::increaseLineGap() {
+void CInteractionHandler::decreaseLineGap() {
     _VarsHandler->addToLineGap(-15.0f);
 }
+
+
 
 void CInteractionHandler::setCallbacks() {
     glutKeyboardFunc(keyboardWrapper);

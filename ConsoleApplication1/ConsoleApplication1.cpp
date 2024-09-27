@@ -1,20 +1,19 @@
 #include "RadarPPI.h"
-#include <cmath>
 #include <ctime>
 #include <GL/freeglut.h>
 #include <iostream>
 
 CRadarPPI* radarPPI = nullptr;
 
-float distance1 = 100.0f;
-float angle1 = 45.0f;
-float height1 = 20.0f;
-float randNum = 0.0f;
+float distance1 = NULL;
+float angle1 = NULL;
+float height1 = NULL;
+int randNum = 0;
 bool clockwiseCheck = false;
 
 void timerFunc(int value) {
     randNum = rand() % 5;
-    if (randNum == 5.0f) {
+    if (randNum < 2) {
         clockwiseCheck = true;
     }
     
@@ -37,7 +36,6 @@ int main() {
     timerFunc(1000);
     radarPPI->setHeightUplimit(35);
     radarPPI->setOuterRange(350);
-    int h = radarPPI->getHeightUplimit();
     radarPPI->endRadarPPI();
     return 0;
 }
