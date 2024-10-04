@@ -34,6 +34,8 @@ public:
     void setHighlightDuration(int duration);
     int getHighlightDuration() const;
 
+    void setSeekerSpeed(float speed);
+
 private:
     IRadarDisplay* display;
 };

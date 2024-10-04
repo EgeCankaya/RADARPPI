@@ -1,15 +1,22 @@
 #include "RadarPPI.h"
 #include <ctime>
 #include <GL/freeglut.h>
-#include <iostream>
+#include <limits> 
 
 CRadarPPI* radarPPI = nullptr;
 
-float distance1 = NULL;
-float angle1 = NULL;
-float height1 = NULL;
+float distance1 = std::numeric_limits<float>::quiet_NaN();
+float angle1 = std::numeric_limits<float>::quiet_NaN();
+float height1 = std::numeric_limits<float>::quiet_NaN();
 int randNum = 0;
 bool clockwiseCheck = false;
+
+typedef struct {
+    double dist_km;
+    double angle_deg;
+    double height_m;
+    double seeker_deg;
+}Scope_Data;
 
 void timerFunc(int value) {
     randNum = rand() % 5;
@@ -17,9 +24,11 @@ void timerFunc(int value) {
         clockwiseCheck = true;
     }
     
-    angle1 = rand() % 360;
+    angle1 = std::numeric_limits<float>::quiet_NaN();
     distance1 = rand() % 300;
     height1 = rand() % 14 + 15;
+
+
     radarPPI->addEnemy(distance1, angle1, height1, clockwiseCheck);
     glutTimerFunc(value, timerFunc, value);
 }
@@ -31,11 +40,13 @@ int main() {
     radarPPI = new CRadarPPI(&display);
 
     radarPPI->run();
-    radarPPI->addEnemy(distance1, angle1, height1, clockwiseCheck);
 
+    radarPPI->addEnemy(distance1, angle1, height1, clockwiseCheck);
     timerFunc(1000);
     radarPPI->setHeightUplimit(35);
     radarPPI->setOuterRange(350);
+    radarPPI->setSeekerSpeed(1.5f);
+
     radarPPI->endRadarPPI();
     return 0;
 }

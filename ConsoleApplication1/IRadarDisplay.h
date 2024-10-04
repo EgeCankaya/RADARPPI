@@ -31,6 +31,8 @@ public:
     
     virtual void setHighlightDuration(int duration) = 0;
     virtual int getHighlightDuration() const = 0;
+
+    virtual void setSeekerSpeed(float speed) = 0;
 };
 
 #endif // IRADARDISPLAY_H

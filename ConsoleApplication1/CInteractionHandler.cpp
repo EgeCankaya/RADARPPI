@@ -60,7 +60,6 @@ void CInteractionHandler::keyboard(unsigned char key, int x, int y) {
     }
 }
 
-
 void CInteractionHandler::mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         int width = glutGet(GLUT_WINDOW_WIDTH);
@@ -220,6 +219,8 @@ void CInteractionHandler::reshape(int width, int height) {
     glOrtho(_VarsHandler->getXleft(), _VarsHandler->getXright(), _VarsHandler->getBottom(), _VarsHandler->getTop(), _VarsHandler->getZNear(), _VarsHandler->getZFar());
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+
 }
 
 void CInteractionHandler::increaseRange() {
@@ -253,8 +254,6 @@ void CInteractionHandler::increaseLineGap() {
 void CInteractionHandler::decreaseLineGap() {
     _VarsHandler->addToLineGap(-15.0f);
 }
-
-
 
 void CInteractionHandler::setCallbacks() {
     glutKeyboardFunc(keyboardWrapper);

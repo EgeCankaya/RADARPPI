@@ -5,10 +5,11 @@
 class CDisplay {
 public:
     void setCallbacks();
-    void enemyWrapper(float distance, float angle, float height, bool clockwise);
+    void addEnemy(float distance, float angle, float height, bool clockwise);
     ~CDisplay();
     
     static CDisplay& getInstance();
+    
 private:
     
     struct Enemy {
@@ -23,7 +24,6 @@ private:
         float hX;
         float hY;
         int lastDetectionTime;
-        bool once;
         bool isHighlighted;
         bool visited;
         float fadeAlpha;
@@ -36,14 +36,14 @@ private:
     int enemyCapacity;
 
     void display();
-    void enemyHighlight();
-
+    void drawEnemyHighlight();
+    void calculateEnemyHighlight();
     void updateAngle();
     void setOuterRange(float range);
 
     static void timerWrapper(int value);
     static void displayWrapper();
-    void addEnemy(float distance, float angle, float height, bool clockwise);
+    
     float findClosestEnemyAngle();
     void expandEnemyArray();
     void removeEnemy(int index);

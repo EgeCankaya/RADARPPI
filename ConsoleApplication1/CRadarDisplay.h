@@ -28,5 +28,7 @@ public:
 
     void setHighlightDuration(int duration)  override;
     int getHighlightDuration() const  override;
+
+    void setSeekerSpeed(float speed) override;
       
 };

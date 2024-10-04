@@ -71,3 +71,7 @@ void CRadarPPI::setHighlightDuration(int duration) {
 int CRadarPPI::getHighlightDuration() const {
     return display->getHighlightDuration();
 }
+
+void CRadarPPI::setSeekerSpeed(float speed) {
+    display->setSeekerSpeed(speed);
+}

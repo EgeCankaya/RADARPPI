@@ -3,10 +3,10 @@
 _Variables* _Variables::instance = nullptr;
 
 _Variables::_Variables()
-    : mousePosX(0), mousePosY(0), isClicked(false), boxID(0),
+    : mousePosX(0), mousePosY(0), isClicked(false), boxID(0), isMinimized(false),
     heightUplimit(30), heightLowlimit(0),
     outerRange(300.0f), lineGap(30), rangeScale(1.0f), clockwise(true),
-    angle(0.0f), highlightDuration(10), lastDetectionTime(0),
+    angle(0.0f), seekerSpeed(1.0f), highlightDuration(10), lastDetectionTime(0),
     xleft(-1.0f), xright(1.0f), bottom(-1.0f), top(1.0f),
     currentscreen(Screen::Main) {}
 
@@ -34,6 +34,9 @@ void _Variables::clearInputBuffer() { inputBuffer.clear(); }
 int _Variables::getBoxID() const { return boxID; }
 void _Variables::setBoxID(int id) { boxID = id; }
 
+bool _Variables::getIsMinimized() const { return isMinimized; }
+void _Variables::setIsMinimized(bool minimized) { isMinimized = minimized; }
+
 int _Variables::getHeightUplimit() const { return heightUplimit; }
 void _Variables::setHeightUplimit(int limit) { heightUplimit = limit; }
 void _Variables::addToHeightUplimit(int limit) { heightUplimit += limit; }
@@ -59,6 +62,9 @@ void _Variables::setClockwise(bool cw) { clockwise = cw; }
 float _Variables::getAngle() const { return angle; }
 void _Variables::setAngle(float a) { angle = a; }
 void _Variables::addToAngle(float a) { angle += a; }
+
+float _Variables::getSeekerSpeed() const { return seekerSpeed; }
+void _Variables::setSeekerSpeed(float speed) { seekerSpeed = speed; }
 
 int _Variables::getHighlightDuration() const { return highlightDuration; }
 void _Variables::setHighlightDuration(int duration) { highlightDuration = duration; }

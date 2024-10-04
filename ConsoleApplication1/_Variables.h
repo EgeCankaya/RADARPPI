@@ -18,6 +18,7 @@ private:
     bool isClicked;
     std::string inputBuffer;
     int boxID;
+    bool isMinimized;
 
     int heightUplimit, heightLowlimit;
     float outerRange;
@@ -25,6 +26,7 @@ private:
     float rangeScale;
     bool clockwise;
     float angle;
+    float seekerSpeed;
     int highlightDuration;
     int lastDetectionTime;
 
@@ -62,6 +64,9 @@ public:
     int getBoxID() const;
     void setBoxID(int id);
 
+    bool getIsMinimized() const;
+    void setIsMinimized(bool minimized);
+
     // Radar variables
     int getHeightUplimit() const;
     void setHeightUplimit(int limit);
@@ -88,6 +93,9 @@ public:
     float getAngle() const;
     void setAngle(float a);
     void addToAngle(float a);
+
+    float getSeekerSpeed() const;
+    void setSeekerSpeed(float speed);
 
     int getHighlightDuration() const;
     void setHighlightDuration(int duration);
