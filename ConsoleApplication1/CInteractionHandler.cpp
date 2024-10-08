@@ -170,7 +170,7 @@ void CInteractionHandler::mouseHover(int x, int y) {
     _VarsHandler->setMousePosY(_VarsHandler->getBottom() + (_VarsHandler->getTop() - _VarsHandler->getBottom()) * (mouseY + 1.0f) / 2.0f);
 }
 
-void CInteractionHandler::mouseWheel(int wheel, int direction, int x, int y) {
+/*void CInteractionHandler::mouseWheel(int wheel, int direction, int x, int y) {
     int width = glutGet(GLUT_WINDOW_WIDTH);
     int height = glutGet(GLUT_WINDOW_HEIGHT);
 
@@ -207,6 +207,16 @@ void CInteractionHandler::mouseWheel(int wheel, int direction, int x, int y) {
         }
     }
     reshape(width, height);
+    glutPostRedisplay();
+}*/
+
+void CInteractionHandler::mouseWheel(int wheel, int direction, int x, int y) {
+    if (direction > 0) {
+        _VarsHandler->addToOuterRange(-5.0f);
+    }
+    else {
+        _VarsHandler->addToOuterRange(5.0f);
+    }
     glutPostRedisplay();
 }
 

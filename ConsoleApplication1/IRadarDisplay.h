@@ -5,7 +5,7 @@
 class IRadarDisplay {
 public:
     virtual void run() = 0;
-    virtual void addEnemy(float distance, float angle, float height, bool clockwise) = 0;
+    virtual void addEnemy(void* dataArray, size_t arraySize) = 0;
 
     virtual void updateEnemy() = 0;
     virtual void endRadarPPI() = 0;

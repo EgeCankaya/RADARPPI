@@ -10,7 +10,8 @@ public:
 
     void run();
     void endRadarPPI();
-    void addEnemy(float distance, float angle, float height, bool clockwise);
+    //void addEnemy(float distance, float angle, float height, float seekerAngle);
+    void addEnemy(void* dataArray, size_t arraySize);
     void updateEnemy();
 
     void setHeightUplimit(int limit);

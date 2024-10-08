@@ -14,6 +14,13 @@ _Variables* _VarsUserDef = _Variables::getInstance();
 CDisplay& display = CDisplay::getInstance();
 CInteractionHandler& interactionHandler = CInteractionHandler::getInstance();
 
+typedef struct {
+    float dist_km;
+    float angle_deg;
+    float height_m;
+    float seeker_deg;
+}Scope_Data;
+
 void CRadarDisplay::run() {
     int argc = 1;    char* argv[1] = { (char*)"RadarDisplay" };
     glutInit(&argc, argv);
@@ -26,46 +33,60 @@ void CRadarDisplay::run() {
     interactionHandler.setCallbacks();
 }
 
-void CRadarDisplay::addEnemy(float distance, float angle, float height, bool clockwise) {
-    static bool isFirstCall = true;
+void CRadarDisplay::addEnemy(void* dataArray, size_t arraySize){
+    Scope_Data* data = static_cast<Scope_Data*>(dataArray);
 
-    bool hasNull = std::isnan(distance) || std::isnan(angle) || std::isnan(height);
+    float distance = 0.0f;
+    float angle = 0.0f;
+    float height = 0.0f;
+    float seekerAngle = 0.0f;
 
-    if (hasNull) {
-        std::ofstream outFile;
+    for (size_t i = 0; i < arraySize; ++i) {
 
-       
-        if (isFirstCall) {
-            outFile.open("null_values_log.txt", std::ios::trunc);
-            isFirstCall = false;
+        distance = data[i].dist_km;
+        angle = data[i].angle_deg;
+        height = data[i].height_m;
+        seekerAngle = data[i].seeker_deg;
+
+        static bool isFirstCall = true;
+
+        bool hasNull = std::isnan(distance) || std::isnan(angle) || std::isnan(height);
+
+        if (hasNull) {
+            std::ofstream outFile;
+
+            if (isFirstCall) {
+                outFile.open("null_values_log.txt", std::ios::trunc);
+                isFirstCall = false;
+            }
+            else {
+                outFile.open("null_values_log.txt", std::ios::app);
+            }
+
+            if (outFile.is_open()) {
+                std::time_t now = std::time(nullptr);
+                std::tm timeinfo;
+                localtime_s(&timeinfo, &now);
+
+                char timestamp[20];
+                std::strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", &timeinfo);
+
+                outFile << "[" << timestamp << "] "
+                    << "distance: " << (std::isnan(distance) ? "NULL" : std::to_string(distance))
+                    << ", angle: " << (std::isnan(angle) ? "NULL" : std::to_string(angle))
+                    << ", height: " << (std::isnan(height) ? "NULL" : std::to_string(height))
+                    << ", clockwise: " << (std::isnan(seekerAngle) ? "NULL" : std::to_string(seekerAngle))
+                    << std::endl;
+                outFile.close();
+            }
+            else {
+                std::cerr << "Unable to open file for writing." << std::endl;
+            }
         }
-        else {
-            outFile.open("null_values_log.txt", std::ios::app); 
-        }
 
-        if (outFile.is_open()) {
-            std::time_t now = std::time(nullptr);
-            std::tm timeinfo;
-            localtime_s(&timeinfo, &now); 
+        display.addEnemy(distance, angle, height, seekerAngle);
 
-            char timestamp[20];
-            std::strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", &timeinfo);
-
-            outFile << "[" << timestamp << "] "
-                << "distance: " << (std::isnan(distance) ? "NULL" : std::to_string(distance))
-                << ", angle: " << (std::isnan(angle) ? "NULL" : std::to_string(angle))
-                << ", height: " << (std::isnan(height) ? "NULL" : std::to_string(height))
-                << ", clockwise: " << (clockwise ? "true" : "false")
-                << std::endl;
-            outFile.close(); 
-        }
-        else {
-            std::cerr << "Unable to open file for writing." << std::endl;
-        }
     }
-
-    // Proceed to add the enemy to the display
-    display.addEnemy(distance, angle, height, clockwise);
 }
 
 void CRadarDisplay::updateEnemy() {

@@ -1,53 +1,55 @@
 #include "RadarPPI.h"
 #include <ctime>
 #include <GL/freeglut.h>
-#include <limits> 
+#include <limits>
+#include <chrono>
+#include <iostream>
 
 CRadarPPI* radarPPI = nullptr;
 
-float distance1 = std::numeric_limits<float>::quiet_NaN();
-float angle1 = std::numeric_limits<float>::quiet_NaN();
-float height1 = std::numeric_limits<float>::quiet_NaN();
-int randNum = 0;
-bool clockwiseCheck = false;
+float seekerAngle = 0.0f;
 
 typedef struct {
     double dist_km;
     double angle_deg;
     double height_m;
     double seeker_deg;
-}Scope_Data;
+} Scope_Data;
+
+Scope_Data data[100];
 
 void timerFunc(int value) {
-    randNum = rand() % 5;
-    if (randNum < 2) {
-        clockwiseCheck = true;
+    int randNum = rand() % 100;  // Random number of enemies (0 to 99)
+    for (int i = 0; i < randNum; ++i) {
+        seekerAngle += rand() % 5 + 1.0f;
+        
+        data[i].seeker_deg = seekerAngle;
+        data[i].dist_km = rand() % 300;  // Random distance (0 to 299 km)
+        data[i].angle_deg = rand() % 361;  // Random angle (0 to 360 degrees)
+        data[i].height_m = rand() % 16 + 15;  // Random height (15 to 30 meters)
+        std::cout << data[i].dist_km << std::endl;
     }
-    
-    angle1 = std::numeric_limits<float>::quiet_NaN();
-    distance1 = rand() % 300;
-    height1 = rand() % 14 + 15;
 
+    radarPPI->addEnemy(data, randNum);  
 
-    radarPPI->addEnemy(distance1, angle1, height1, clockwiseCheck);
     glutTimerFunc(value, timerFunc, value);
 }
 
 int main() {
-    srand(static_cast<unsigned int>(time(0)));
+    unsigned int seed = static_cast<unsigned int>(
+        std::chrono::high_resolution_clock::now().time_since_epoch().count()
+        );
+    srand(seed);
 
     CRadarDisplay display;
     radarPPI = new CRadarPPI(&display);
 
     radarPPI->run();
 
-    radarPPI->addEnemy(distance1, angle1, height1, clockwiseCheck);
-    timerFunc(1000);
-    radarPPI->setHeightUplimit(35);
-    radarPPI->setOuterRange(350);
-    radarPPI->setSeekerSpeed(1.5f);
+    timerFunc(1000);  
+    radarPPI->setHeightUplimit(35); 
+    radarPPI->setOuterRange(350);    
 
     radarPPI->endRadarPPI();
     return 0;
 }
-

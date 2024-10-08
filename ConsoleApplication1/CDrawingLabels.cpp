@@ -35,9 +35,7 @@ void CDrawingLabels::drawSeeker() {
         glVertex2f(x, y);
         glEnd();
     }
-
-
-    }
+ }
 
 void CDrawingLabels::drawLinesWithAngles(int gap_in_degrees) {
     int num_points = static_cast<int>(360.0f / gap_in_degrees);
@@ -163,6 +161,12 @@ void CDrawingLabels::drawBox() {
                 heightStart = 0.35f;
                 heightEnd = heightStart - 0.10f;
             }
+            else if (_VarsLabel->getBoxID() == 4) {
+                widthStart = 0.07f;
+                widthEnd = 0.32f;
+                heightStart = 0.35f;
+                heightEnd = heightStart - 0.10f;
+            }
             glBegin(GL_LINE_LOOP);
             glVertex2f(widthStart, heightStart);
             glVertex2f(widthEnd, heightStart);  
@@ -183,7 +187,7 @@ void CDrawingLabels::renderValues(float x, float y, const char* text) {         
     glPopMatrix();
 }
 
-void CDrawingLabels::drawCurrentValues() { 
+void CDrawingLabels::drawCurrentValues() {
     char buffer[256];
 
     sprintf_s(buffer, "%d km", _VarsLabel->getHeightUplimit());
@@ -197,6 +201,16 @@ void CDrawingLabels::drawCurrentValues() {
 
     sprintf_s(buffer, "%.0f degrees", _VarsLabel->getLineGap());
     renderValues(0.08f, 0.28f, buffer);
+
+    if (_VarsLabel->getClockwise()) {
+        sprintf_s(buffer, "Clockwise");
+        renderValues(-0.15f, 0.13f, buffer);
+    }
+
+    else {
+        sprintf_s(buffer, "Counter Clockwise");
+        renderValues(-0.15f, 0.13f, buffer);
+    }
 }
 
 void CDrawingLabels::drawButton(float x, float y, float width, float height, const char* label) {                                 //USABLE
@@ -216,12 +230,16 @@ void CDrawingLabels::drawButton(float x, float y, float width, float height, con
         renderText(x + width / 2 - 0.22, y + height / 2 - 0.01f, label);
     }
 
+    else if (label == "Change Seeker Rotation") {
+        renderText(x + width / 2 - 0.25, y + height / 2 - 0.01f, label);
+    }
+
     else {
         renderText(x + width / 2 - 0.10, y + height / 2 - 0.01f, label);
     }
 }
 
-void CDrawingLabels::drawButtons() { 
+void CDrawingLabels::drawButtons() {
     if (_VarsLabel->getCurrentScreen() == Screen::Main) {
         drawButton(0.75f, -0.85f, 0.15f, 0.075f, "+");
 
@@ -248,6 +266,9 @@ void CDrawingLabels::drawButtons() {
 
         drawButton(-0.20f, 0.25f, 0.13f, 0.1f, "-");
         drawButton(-0.07f, 0.25f, 0.13f, 0.1f, "+");
+
+        drawButton(-0.70f, 0.10f, 0.52f, 0.1f, "Change Seeker Rotation");
+
     }
 }
 

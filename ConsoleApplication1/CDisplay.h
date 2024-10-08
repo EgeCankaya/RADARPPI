@@ -5,7 +5,7 @@
 class CDisplay {
 public:
     void setCallbacks();
-    void addEnemy(float distance, float angle, float height, bool clockwise);
+    void addEnemy(float distance, float angle, float height, float seekerAngle);
     ~CDisplay();
     
     static CDisplay& getInstance();

@@ -58,7 +58,7 @@ void CDisplay::updateAngle() {
     }
 
     if (_VarsDisp->getClockwise()) {
-        _VarsDisp->addToAngle(_VarsDisp->getSeekerSpeed()); 
+        _VarsDisp->addToAngle(_VarsDisp->getSeekerSpeed());
     }
     else {
         _VarsDisp->addToAngle(-_VarsDisp->getSeekerSpeed());
@@ -135,11 +135,11 @@ void CDisplay::calculateEnemyHighlight() {
     }
 }
 
-void CDisplay::addEnemy(float distance, float angle, float height, bool clockwiseCheck) {
+void CDisplay::addEnemy(float distance, float angle, float height, float seekerAngle) {
     if (enemyCount == enemyCapacity) {
         expandEnemyArray();
     }
-    _VarsDisp->setClockwise(clockwiseCheck);
+    //_VarsDisp->setAngle(seekerAngle);
     enemies[enemyCount].realDistance = distance;
     enemies[enemyCount].angle = angle;
     enemies[enemyCount].height = height;

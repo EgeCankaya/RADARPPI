@@ -4,7 +4,8 @@
 class CRadarDisplay : public IRadarDisplay {
 public:
     void run() override;
-    void addEnemy(float distance, float angle, float height, bool clockwise) override;
+    void addEnemy(void* dataArray, size_t arraySize);
+    //void addEnemy(float distance, float angle, float height, float seekerAngle) override;
     void updateEnemy() override;
     void endRadarPPI() override;
 
@@ -30,5 +31,5 @@ public:
     int getHighlightDuration() const  override;
 
     void setSeekerSpeed(float speed) override;
-      
+private:  
 };
