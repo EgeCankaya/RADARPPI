@@ -79,9 +79,10 @@ void CDisplay::calculateEnemyHighlight() {
         Enemy& enemy = enemies[i];
 
         if (enemy.height < _VarsDisp->getHeightLowlimit() || enemy.height > _VarsDisp->getHeightUplimit()) {
+            removeEnemy(i);
             continue;
         }
-
+         
         if (!enemy.isHighlighted) {
             enemy.distance = 0.90f / (_VarsDisp->getOuterRange() / enemy.realDistance);
             enemy.x = enemy.distance * cosf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
