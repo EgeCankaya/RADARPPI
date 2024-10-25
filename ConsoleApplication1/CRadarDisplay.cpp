@@ -70,12 +70,14 @@ void CRadarDisplay::addEnemy(void* dataArray, size_t arraySize){
 
                 char timestamp[20];
                 std::strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", &timeinfo);
+                int angle_info;
+                angle_info = seekerAngle;
 
                 outFile << "[" << timestamp << "] "
                     << "distance: " << (std::isnan(distance) ? "NULL" : std::to_string(distance))
                     << ", angle: " << (std::isnan(angle) ? "NULL" : std::to_string(angle))
                     << ", height: " << (std::isnan(height) ? "NULL" : std::to_string(height))
-                    << ", clockwise: " << (std::isnan(seekerAngle) ? "NULL" : std::to_string(seekerAngle))
+                    << ", seeker angle: " << (std::isnan(seekerAngle) ? "NULL" : std::to_string(std::abs(angle_info % 360)))
                     << std::endl;
                 outFile.close();
             }
@@ -85,7 +87,6 @@ void CRadarDisplay::addEnemy(void* dataArray, size_t arraySize){
         }
 
         display.addEnemy(distance, angle, height, seekerAngle);
-
     }
 }
 

@@ -57,13 +57,6 @@ void CDisplay::updateAngle() {
         angleDiff += 360.0f;
     }
 
-    if (_VarsDisp->getClockwise()) {
-        _VarsDisp->addToAngle(_VarsDisp->getSeekerSpeed());
-    }
-    else {
-        _VarsDisp->addToAngle(-_VarsDisp->getSeekerSpeed());
-    }
-
     _VarsDisp->setAngle(fmod(_VarsDisp->getAngle(), 360.0f));
     if (_VarsDisp->getAngle() < 0) {
         _VarsDisp->addToAngle(360.0f);
@@ -82,14 +75,14 @@ void CDisplay::calculateEnemyHighlight() {
             removeEnemy(i);
             continue;
         }
-         
+
         if (!enemy.isHighlighted) {
             enemy.distance = 0.90f / (_VarsDisp->getOuterRange() / enemy.realDistance);
             enemy.x = enemy.distance * cosf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
             enemy.y = enemy.distance * -sinf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
         }
 
-        float angleTolerance = _VarsDisp->getSeekerSpeed(); 
+        float angleTolerance = _VarsDisp->getSeekerSpeed();
         float angleDiff = _VarsDisp->getAngle() - enemy.angle;
 
         if (angleDiff > 180.0f) {
@@ -140,7 +133,7 @@ void CDisplay::addEnemy(float distance, float angle, float height, float seekerA
     if (enemyCount == enemyCapacity) {
         expandEnemyArray();
     }
-    //_VarsDisp->setAngle(seekerAngle);
+    _VarsDisp->setAngle(seekerAngle);
     enemies[enemyCount].realDistance = distance;
     enemies[enemyCount].angle = angle;
     enemies[enemyCount].height = height;
@@ -159,6 +152,10 @@ void CDisplay::addEnemy(float distance, float angle, float height, float seekerA
     enemies[enemyCount].highlightedRange = 0.0f;
     enemies[enemyCount].changedRange = false;
     enemyCount++;
+    std::cout << "Enemy Degrees:\n";
+    for (int i = 0; i < enemyCount; ++i) {
+        std::cout << "Enemy " << i + 1 << ": Angle = " << enemies[i].angle << " degrees\n";
+    }
 }
 
 void CDisplay::expandEnemyArray() {
@@ -180,7 +177,7 @@ void CDisplay::drawEnemyHighlight() {
         if (enemy.isHighlighted && ((_VarsDisp->getMousePosX() > enemy.x - 0.02f) && (_VarsDisp->getMousePosX() < enemy.x + 0.02f) && (_VarsDisp->getMousePosY() > enemy.y - 0.02f) && (_VarsDisp->getMousePosY() < enemy.y + 0.02f)) && !enemy.changedRange) {
             glColor3f(0.0f, 1.0f, 0.0f);
             char buffer[256];
-            sprintf_s(buffer, "h:%.0fkm ", enemy.height);
+            sprintf_s(buffer, "h:%.0fm ", enemy.height);
             label.renderValues(enemy.x + 0.05f, enemy.y + 0.05f, buffer);
 
             sprintf_s(buffer, "d:%.0fkm ", enemy.realDistance);
