@@ -22,6 +22,7 @@ void CDisplay::display() {
     if (_VarsDisp->getCurrentScreen() == Screen::Main) {
         glColor3f(0.0f, 0.75f, 0.0f);
         label.drawCircle(0.0f, 0.0f, 0.90f, 100);
+        glColor3f(0.0f, 0.50f, 0.0f);
         label.drawCircle(0.0f, 0.0f, 0.30f, 100);
         label.drawCircle(0.0f, 0.0f, 0.60f, 100);
         label.drawLinesWithAngles(_VarsDisp->getLineGap());
@@ -88,44 +89,46 @@ void CDisplay::calculateEnemyHighlight() {
         if (angleDiff > 180.0f) {
             angleDiff -= 360.0f;
         }
+
         else if (angleDiff < -180.0f) {
             angleDiff += 360.0f;
         }
 
-        if (_VarsDisp->getClockwise() && angleDiff >= 0 && angleDiff <= angleTolerance && !enemy.visited) {
-            enemy.lastDetectionTime = glutGet(GLUT_ELAPSED_TIME);
+        if (_VarsDisp->getClockwise() && -angleDiff < 1 && !enemy.visited && enemy.realDistance < _VarsDisp->getOuterRange()) {
             enemy.isHighlighted = true;
-            enemy.fadeAlpha = 1.0f;
-            enemy.visited = true;
-        }
-        else if (!_VarsDisp->getClockwise() && angleDiff <= 0 && angleDiff >= -angleTolerance && !enemy.visited) {
-            enemy.lastDetectionTime = glutGet(GLUT_ELAPSED_TIME);
-            enemy.isHighlighted = true;
-            enemy.fadeAlpha = 1.0f;
             enemy.visited = true;
         }
 
-        if (enemy.isHighlighted && ((_VarsDisp->getMousePosX() > enemy.x - 0.02f) && (_VarsDisp->getMousePosX() < enemy.x + 0.02f) && (_VarsDisp->getMousePosY() > enemy.y - 0.02f) && (_VarsDisp->getMousePosY() < enemy.y + 0.02f)) && !enemy.changedRange) {
-            enemy.fadeAlpha -= 0.0005f * _VarsDisp->getHighlightDuration();
+        else if (_VarsDisp->getClockwise() && angleDiff < 1 && !enemy.visited && enemy.realDistance < _VarsDisp->getOuterRange()) {
+            enemy.isHighlighted = true;
+            enemy.visited = true;
+        }
+        
+        if (_VarsDisp->getClockwise()) {
+            float remainingAngle = std::fmod((enemy.angle - _VarsDisp->getAngle() + 360.0f), 360.0f);
+            enemy.fadeAlpha = remainingAngle / 360.0f;
         }
 
-        if (enemy.isHighlighted && enemy.realDistance < _VarsDisp->getOuterRange()) {
-            if (enemy.fadeAlpha >= 0.05f && _VarsDisp->getOuterRange() >= enemy.highlightedRange && !enemy.changedRange) {
-                enemy.distance = 0.90f / (_VarsDisp->getOuterRange() / enemy.realDistance);
-                enemy.x = enemy.distance * cosf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
-                enemy.y = enemy.distance * -sinf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
-            }
-            else {
-                enemy.changedRange = true;
-                enemy.fadeAlpha = 0.0f;
-            }
-
-            if (enemy.fadeAlpha < 0.05f) {
-                removeEnemy(i);
-                --i;
-            }
+        else {
+            float remainingAngle = std::fmod((enemy.angle - _VarsDisp->getAngle() + 360.0f), 360.0f);
+            enemy.fadeAlpha = remainingAngle / 360.0f;
         }
-        enemy.fadeAlpha -= 0.0005f * _VarsDisp->getHighlightDuration();
+
+        if (enemy.fadeAlpha >= 0.003f && _VarsDisp->getOuterRange() >= enemy.highlightedRange && !enemy.changedRange) {
+            enemy.distance = 0.90f / (_VarsDisp->getOuterRange() / enemy.realDistance);
+            enemy.x = enemy.distance * cosf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
+            enemy.y = enemy.distance * -sinf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
+        }
+        else {
+            enemy.changedRange = true;
+            enemy.fadeAlpha = 0.0f;
+        }
+
+        if (enemy.fadeAlpha <= 0.003f) {
+            removeEnemy(i);
+            --i;
+        }
+ 
     }
 }
 
@@ -144,18 +147,12 @@ void CDisplay::addEnemy(float distance, float angle, float height, float seekerA
     enemies[enemyCount].lastY = 0.0f;
     enemies[enemyCount].hX = 0.0f;
     enemies[enemyCount].hY = 0.0f;
-    enemies[enemyCount].lastDetectionTime = false;
     enemies[enemyCount].isHighlighted = false;
     enemies[enemyCount].visited = false;
     enemies[enemyCount].fadeAlpha = 1.0f;
-    enemies[enemyCount].visited = false;
     enemies[enemyCount].highlightedRange = 0.0f;
     enemies[enemyCount].changedRange = false;
     enemyCount++;
-    std::cout << "Enemy Degrees:\n";
-    for (int i = 0; i < enemyCount; ++i) {
-        std::cout << "Enemy " << i + 1 << ": Angle = " << enemies[i].angle << " degrees\n";
-    }
 }
 
 void CDisplay::expandEnemyArray() {
@@ -174,7 +171,7 @@ void CDisplay::drawEnemyHighlight() {
     for (int i = 0; i < enemyCount; ++i) {
         Enemy& enemy = enemies[i];
 
-        if (enemy.isHighlighted && ((_VarsDisp->getMousePosX() > enemy.x - 0.02f) && (_VarsDisp->getMousePosX() < enemy.x + 0.02f) && (_VarsDisp->getMousePosY() > enemy.y - 0.02f) && (_VarsDisp->getMousePosY() < enemy.y + 0.02f)) && !enemy.changedRange) {
+        if (enemy.isHighlighted && ((_VarsDisp->getMousePosX() > enemy.x - 0.02f) && (_VarsDisp->getMousePosX() < enemy.x + 0.02f) && (_VarsDisp->getMousePosY() > enemy.y - 0.02f) && (_VarsDisp->getMousePosY() < enemy.y + 0.02f)) && !enemy.changedRange && enemy.realDistance < _VarsDisp->getOuterRange()) {
             glColor3f(0.0f, 1.0f, 0.0f);
             char buffer[256];
             sprintf_s(buffer, "h:%.0fm ", enemy.height);
@@ -185,7 +182,7 @@ void CDisplay::drawEnemyHighlight() {
         }
 
         if (enemy.isHighlighted && enemy.realDistance < _VarsDisp->getOuterRange()) {
-            if (enemy.fadeAlpha >= 0.05f && _VarsDisp->getOuterRange() >= enemy.highlightedRange && !enemy.changedRange) {
+            if (enemy.fadeAlpha >= 0.03f && _VarsDisp->getOuterRange() >= enemy.highlightedRange && !enemy.changedRange) {
                 glColor3f(0.0f, enemy.fadeAlpha, 0.0f);
                 glPushMatrix();
                 glTranslatef(enemy.x, enemy.y, 1.0f);

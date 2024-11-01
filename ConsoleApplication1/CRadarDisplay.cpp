@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <ctime>
+#include <vector>
 
 _Variables* _VarsUserDef = _Variables::getInstance();
 CDisplay& display = CDisplay::getInstance();
@@ -33,7 +34,8 @@ void CRadarDisplay::run() {
     interactionHandler.setCallbacks();
 }
 
-void CRadarDisplay::addEnemy(void* dataArray, size_t arraySize){
+void CRadarDisplay::addEnemy(void* dataArray, size_t arraySize) {
+
     Scope_Data* data = static_cast<Scope_Data*>(dataArray);
 
     float distance = 0.0f;
@@ -42,7 +44,6 @@ void CRadarDisplay::addEnemy(void* dataArray, size_t arraySize){
     float seekerAngle = 0.0f;
 
     for (size_t i = 0; i < arraySize; ++i) {
-
         distance = data[i].dist_km;
         angle = data[i].angle_deg;
         height = data[i].height_m;
@@ -70,25 +71,24 @@ void CRadarDisplay::addEnemy(void* dataArray, size_t arraySize){
 
                 char timestamp[20];
                 std::strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", &timeinfo);
-                int angle_info;
-                angle_info = seekerAngle;
+                int angle_info = static_cast<int>(seekerAngle) % 360;
 
                 outFile << "[" << timestamp << "] "
                     << "distance: " << (std::isnan(distance) ? "NULL" : std::to_string(distance))
                     << ", angle: " << (std::isnan(angle) ? "NULL" : std::to_string(angle))
                     << ", height: " << (std::isnan(height) ? "NULL" : std::to_string(height))
-                    << ", seeker angle: " << (std::isnan(seekerAngle) ? "NULL" : std::to_string(std::abs(angle_info % 360)))
+                    << ", seeker angle: " << angle_info
                     << std::endl;
                 outFile.close();
             }
             else {
                 std::cerr << "Unable to open file for writing." << std::endl;
             }
-        }
-
+        }        
         display.addEnemy(distance, angle, height, seekerAngle);
     }
 }
+
 
 void CRadarDisplay::updateEnemy() {
     glutPostRedisplay();

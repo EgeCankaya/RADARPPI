@@ -23,7 +23,6 @@ private:
         float lastY;
         float hX;
         float hY;
-        int lastDetectionTime;
         bool isHighlighted;
         bool visited;
         float fadeAlpha;

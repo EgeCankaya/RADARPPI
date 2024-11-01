@@ -4,9 +4,9 @@ _Variables* _Variables::instance = nullptr;
 
 _Variables::_Variables()
     : mousePosX(0), mousePosY(0), isClicked(false), boxID(0), isMinimized(false),
-    heightUplimit(30), heightLowlimit(0),
+    heightUplimit(3000), heightLowlimit(0),
     outerRange(300.0f), lineGap(30), rangeScale(1.0f), clockwise(true),
-    angle(0.0f), seekerSpeed(1.0f), highlightDuration(10), lastDetectionTime(0),
+    angle(0.0f), seekerSpeed(1.0f), highlightDuration(1), lastDetectionTime(0),
     xleft(-1.0f), xright(1.0f), bottom(-1.0f), top(1.0f),
     currentscreen(Screen::Main) {}
 

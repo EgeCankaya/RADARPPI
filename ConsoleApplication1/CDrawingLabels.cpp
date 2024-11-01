@@ -35,7 +35,7 @@ void CDrawingLabels::drawSeeker() {
         glVertex2f(x, y);
         glEnd();
     }
- }
+}
 
 void CDrawingLabels::drawLinesWithAngles(int gap_in_degrees) {
     int num_points = static_cast<int>(360.0f / gap_in_degrees);
@@ -133,7 +133,7 @@ void CDrawingLabels::drawBox() {
         bool isVisible = (currentTime % (int)(2 * blinkSpeed)) < blinkSpeed;
 
         if (isVisible) {
-            glColor3f(0.0f, 1.0f, 0.0f); 
+            glColor3f(0.0f, 1.0f, 0.0f);
 
             float widthStart = 0.0f, widthEnd = 0.0f, heightStart = 0.0f, heightEnd = 0.0f;
 
@@ -169,9 +169,9 @@ void CDrawingLabels::drawBox() {
             }
             glBegin(GL_LINE_LOOP);
             glVertex2f(widthStart, heightStart);
-            glVertex2f(widthEnd, heightStart);  
-            glVertex2f(widthEnd, heightEnd);    
-            glVertex2f(widthStart, heightEnd);  
+            glVertex2f(widthEnd, heightStart);
+            glVertex2f(widthEnd, heightEnd);
+            glVertex2f(widthStart, heightEnd);
             glEnd();
         }
     }
@@ -190,10 +190,10 @@ void CDrawingLabels::renderValues(float x, float y, const char* text) {         
 void CDrawingLabels::drawCurrentValues() {
     char buffer[256];
 
-    sprintf_s(buffer, "%d km", _VarsLabel->getHeightUplimit());
+    sprintf_s(buffer, "%d m", _VarsLabel->getHeightUplimit());
     renderValues(-0.05f, 0.73f, buffer);
 
-    sprintf_s(buffer, "%d km", _VarsLabel->getHeightLowlimit());
+    sprintf_s(buffer, "%d m", _VarsLabel->getHeightLowlimit());
     renderValues(-0.05f, 0.58f, buffer);
 
     sprintf_s(buffer, "%.0f km", _VarsLabel->getOuterRange());
