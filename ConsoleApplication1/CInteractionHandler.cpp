@@ -150,10 +150,6 @@ void CInteractionHandler::mouse(int button, int state, int x, int y) {
                     _VarsHandler->setBoxID(3);
                     _VarsHandler->setIsClicked(true);
                 }
-                else if (isMouseClickInsideBox(-0.70f, 0.10f, 0.52f, 0.1f)) {
-                    if (_VarsHandler->getClockwise()) _VarsHandler->setClockwise(false);
-                    else _VarsHandler->setClockwise(true);
-                }
             }
         }
     }
@@ -169,46 +165,6 @@ void CInteractionHandler::mouseHover(int x, int y) {
     _VarsHandler->setMousePosX(_VarsHandler->getXleft() + (_VarsHandler->getXright() - _VarsHandler->getXleft()) * (mouseX + 1.0f) / 2.0f);
     _VarsHandler->setMousePosY(_VarsHandler->getBottom() + (_VarsHandler->getTop() - _VarsHandler->getBottom()) * (mouseY + 1.0f) / 2.0f);
 }
-
-/*void CInteractionHandler::mouseWheel(int wheel, int direction, int x, int y) {
-    int width = glutGet(GLUT_WINDOW_WIDTH);
-    int height = glutGet(GLUT_WINDOW_HEIGHT);
-
-    float mouseX = 2.0f * (x - width / 2) / std::min(width, height);
-    float mouseY = 2.0f * (height / 2 - y) / std::min(width, height);
-
-    mouseX = _VarsHandler->getXleft() + (_VarsHandler->getXright() - _VarsHandler->getXleft()) * (mouseX + 1.0f) / 2.0f;
-    mouseY = _VarsHandler->getBottom() + (_VarsHandler->getTop() - _VarsHandler->getBottom()) * (mouseY + 1.0f) / 2.0f;
-
-    if (direction > 0) {
-        float newLeft = _VarsHandler->getXleft() + _VarsHandler->getZoomFactor()* (mouseX - _VarsHandler->getXleft()) / (_VarsHandler->getXright() - _VarsHandler->getXleft());
-        float newRight = _VarsHandler->getXright() - _VarsHandler->getZoomFactor() * (_VarsHandler->getXright() - mouseX) / (_VarsHandler->getXright() - _VarsHandler->getXleft());
-        float newBottom = _VarsHandler->getBottom() + _VarsHandler->getZoomFactor() * (mouseY - _VarsHandler->getBottom()) / (_VarsHandler->getTop() - _VarsHandler->getBottom());
-        float newTop = _VarsHandler->getTop() - _VarsHandler->getZoomFactor() * (_VarsHandler->getTop() - mouseY) / (_VarsHandler->getTop() - _VarsHandler->getBottom());
-
-        if (newRight > newLeft && newTop > newBottom) {
-            _VarsHandler->setXleft(newLeft);
-            _VarsHandler->setXright(newRight);
-            _VarsHandler->setBottom(newBottom);
-            _VarsHandler->setTop(newTop);
-        }
-    }
-    else {
-        float newLeft = _VarsHandler->getXleft() - _VarsHandler->getZoomFactor() * (mouseX - _VarsHandler->getXleft()) / (_VarsHandler->getXright() - _VarsHandler->getXleft());
-        float newRight = _VarsHandler->getXright() + _VarsHandler->getZoomFactor() * (_VarsHandler->getXright() - mouseX) / (_VarsHandler->getXright() - _VarsHandler->getXleft());
-        float newBottom = _VarsHandler->getBottom() - _VarsHandler->getZoomFactor() * (mouseY - _VarsHandler->getBottom()) / (_VarsHandler->getTop() - _VarsHandler->getBottom());
-        float newTop = _VarsHandler->getTop() + _VarsHandler->getZoomFactor() * (_VarsHandler->getTop() - mouseY) / (_VarsHandler->getTop() - _VarsHandler->getBottom());
-
-        if (newRight > newLeft && newTop > newBottom) {
-            _VarsHandler->setXleft(newLeft);
-            _VarsHandler->setXright(newRight);
-            _VarsHandler->setBottom(newBottom);
-            _VarsHandler->setTop(newTop);
-        }
-    }
-    reshape(width, height);
-    glutPostRedisplay();
-}*/
 
 void CInteractionHandler::mouseWheel(int wheel, int direction, int x, int y) {
     if (direction > 0) {
@@ -238,23 +194,38 @@ void CInteractionHandler::increaseRange() {
 }
 
 void CInteractionHandler::decreaseRange() {
-    _VarsHandler->addToOuterRange(-30.0f);
+    if (_VarsHandler->getOuterRange() > 30.0f) {
+        _VarsHandler->addToOuterRange(-30.0f);
+    }
+    else {
+        _VarsHandler->addToOuterRange(-_VarsHandler->getOuterRange());
+    }
 }
 
 void CInteractionHandler::increaseHeightUp() {
-    _VarsHandler->addToHeightUplimit(5.0f);
+    _VarsHandler->addToHeightUplimit(50.0f);
 }
 
 void CInteractionHandler::decreaseHeightUp() {
-    _VarsHandler->addToHeightUplimit(-5.0f);
+    if (_VarsHandler->getHeightUplimit() > 50.0f) {
+        _VarsHandler->addToHeightUplimit(-50.0f);
+    }
+    else {
+        _VarsHandler->addToHeightUplimit(-_VarsHandler->getHeightUplimit());
+    }
 }
 
 void CInteractionHandler::increaseHeightLow() {
-    _VarsHandler->addToHeightLowlimit(5.0f);
+    _VarsHandler->addToHeightLowlimit(50.0f);
 }
 
 void CInteractionHandler::decreaseHeightLow() {
-    _VarsHandler->addToHeightLowlimit(-5.0f);
+    if (_VarsHandler->getHeightLowlimit() > 5.0f) {
+        _VarsHandler->addToHeightLowlimit(-5.0f);
+    }
+    else {
+        _VarsHandler->addToHeightLowlimit(-_VarsHandler->getHeightLowlimit());
+    }
 }
 
 void CInteractionHandler::increaseLineGap() {

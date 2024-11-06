@@ -7,7 +7,7 @@ _Variables::_Variables()
     heightUplimit(3000), heightLowlimit(0),
     outerRange(300.0f), lineGap(30), rangeScale(1.0f), clockwise(true),
     angle(0.0f), seekerSpeed(1.0f), highlightDuration(1), lastDetectionTime(0),
-    xleft(-1.0f), xright(1.0f), bottom(-1.0f), top(1.0f),
+    xleft(-1.0f), xright(1.0f), bottom(-1.0f), top(1.0f), clockwiseCheck(0.0f),
     currentscreen(Screen::Main) {}
 
 _Variables* _Variables::getInstance() {
@@ -58,6 +58,9 @@ void _Variables::setRangeScale(float scale) { rangeScale = scale; }
 
 bool _Variables::getClockwise() const { return clockwise; }
 void _Variables::setClockwise(bool cw) { clockwise = cw; }
+
+float _Variables::getClockwiseCheck() const { return clockwiseCheck; }
+void _Variables::setClockwiseCheck(float a) { clockwiseCheck = a; }
 
 float _Variables::getAngle() const { return angle; }
 void _Variables::setAngle(float a) { angle = a; }

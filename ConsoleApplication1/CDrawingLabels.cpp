@@ -104,7 +104,6 @@ void CDrawingLabels::drawCircle(float cx, float cy, float radius, int num_segmen
 
 void CDrawingLabels::drawRangeLabels() {
     const float radii[] = { 0.30f, 0.60f, 0.90f };
-    //outerRange;
     const float range_values[] = { _VarsLabel->getOuterRange() / 3.0f, _VarsLabel->getOuterRange() * 2.0f / 3.0f , _VarsLabel->getOuterRange() };
 
     for (int i = 0; i < 3; ++i) {
@@ -139,13 +138,13 @@ void CDrawingLabels::drawBox() {
 
             if (_VarsLabel->getBoxID() == 0) {
                 widthStart = -0.09f;
-                widthEnd = 0.10f;
+                widthEnd = 0.15f;
                 heightStart = 0.80f;
                 heightEnd = heightStart - 0.10f;
             }
             else if (_VarsLabel->getBoxID() == 1) {
                 widthStart = -0.09f;
-                widthEnd = 0.10f;
+                widthEnd = 0.15f;
                 heightStart = 0.65f;
                 heightEnd = heightStart - 0.10f;
             }
@@ -201,16 +200,6 @@ void CDrawingLabels::drawCurrentValues() {
 
     sprintf_s(buffer, "%.0f degrees", _VarsLabel->getLineGap());
     renderValues(0.08f, 0.28f, buffer);
-
-    if (_VarsLabel->getClockwise()) {
-        sprintf_s(buffer, "Clockwise");
-        renderValues(-0.15f, 0.13f, buffer);
-    }
-
-    else {
-        sprintf_s(buffer, "Counter Clockwise");
-        renderValues(-0.15f, 0.13f, buffer);
-    }
 }
 
 void CDrawingLabels::drawButton(float x, float y, float width, float height, const char* label) {                                 //USABLE
@@ -228,10 +217,6 @@ void CDrawingLabels::drawButton(float x, float y, float width, float height, con
 
     else if (label == "Degree Between Lines") {
         renderText(x + width / 2 - 0.22, y + height / 2 - 0.01f, label);
-    }
-
-    else if (label == "Change Seeker Rotation") {
-        renderText(x + width / 2 - 0.25, y + height / 2 - 0.01f, label);
     }
 
     else {
@@ -266,9 +251,6 @@ void CDrawingLabels::drawButtons() {
 
         drawButton(-0.20f, 0.25f, 0.13f, 0.1f, "-");
         drawButton(-0.07f, 0.25f, 0.13f, 0.1f, "+");
-
-        drawButton(-0.70f, 0.10f, 0.52f, 0.1f, "Change Seeker Rotation");
-
     }
 }
 

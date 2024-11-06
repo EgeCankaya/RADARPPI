@@ -25,6 +25,7 @@ private:
     float lineGap;
     float rangeScale;
     bool clockwise;
+    float clockwiseCheck;
     float angle;
     float seekerSpeed;
     int highlightDuration;
@@ -89,6 +90,9 @@ public:
 
     bool getClockwise() const;
     void setClockwise(bool cw);
+
+    float getClockwiseCheck() const;
+    void setClockwiseCheck(float a);
 
     float getAngle() const;
     void setAngle(float a);

@@ -78,6 +78,7 @@ void CDisplay::calculateEnemyHighlight() {
         }
 
         if (!enemy.isHighlighted) {
+            enemy.fadeAlpha = 1.0f;
             enemy.distance = 0.90f / (_VarsDisp->getOuterRange() / enemy.realDistance);
             enemy.x = enemy.distance * cosf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
             enemy.y = enemy.distance * -sinf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
@@ -94,41 +95,31 @@ void CDisplay::calculateEnemyHighlight() {
             angleDiff += 360.0f;
         }
 
-        if (_VarsDisp->getClockwise() && -angleDiff < 1 && !enemy.visited && enemy.realDistance < _VarsDisp->getOuterRange()) {
+        if (_VarsDisp->getClockwise() && angleDiff >= 0 && angleDiff <= angleTolerance && !enemy.visited) {
             enemy.isHighlighted = true;
+            enemy.fadeAlpha = 1.0f;
+            enemy.visited = true;
+        }
+        else if (!_VarsDisp->getClockwise() && angleDiff <= 0 && angleDiff >= -angleTolerance && !enemy.visited) {
+            enemy.isHighlighted = true;
+            enemy.fadeAlpha = 1.0f;
             enemy.visited = true;
         }
 
-        else if (_VarsDisp->getClockwise() && angleDiff < 1 && !enemy.visited && enemy.realDistance < _VarsDisp->getOuterRange()) {
-            enemy.isHighlighted = true;
-            enemy.visited = true;
-        }
-        
-        if (_VarsDisp->getClockwise()) {
-            float remainingAngle = std::fmod((enemy.angle - _VarsDisp->getAngle() + 360.0f), 360.0f);
-            enemy.fadeAlpha = remainingAngle / 360.0f;
-        }
-
-        else {
-            float remainingAngle = std::fmod((enemy.angle - _VarsDisp->getAngle() + 360.0f), 360.0f);
-            enemy.fadeAlpha = remainingAngle / 360.0f;
-        }
-
-        if (enemy.fadeAlpha >= 0.003f && _VarsDisp->getOuterRange() >= enemy.highlightedRange && !enemy.changedRange) {
+        if (enemy.fadeAlpha >= 0.05f && _VarsDisp->getOuterRange() >= enemy.highlightedRange) {
             enemy.distance = 0.90f / (_VarsDisp->getOuterRange() / enemy.realDistance);
             enemy.x = enemy.distance * cosf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
             enemy.y = enemy.distance * -sinf(enemy.angle * M_PI / 180.0f) / _VarsDisp->getRangeScale();
         }
-        else {
-            enemy.changedRange = true;
-            enemy.fadeAlpha = 0.0f;
-        }
 
-        if (enemy.fadeAlpha <= 0.003f) {
+        if (enemy.fadeAlpha <= 0.05f && enemy.visited) {
             removeEnemy(i);
             --i;
         }
- 
+
+        if (enemy.visited) {
+            enemy.fadeAlpha -= 0.011f / _VarsDisp->getHighlightDuration();
+        }
     }
 }
 
@@ -136,6 +127,25 @@ void CDisplay::addEnemy(float distance, float angle, float height, float seekerA
     if (enemyCount == enemyCapacity) {
         expandEnemyArray();
     }
+    
+    if (seekerAngle < _VarsDisp->getClockwiseCheck()) {
+        if (seekerAngle != 0 && (_VarsDisp->getClockwiseCheck() < 359.0f)) {
+            _VarsDisp->setClockwise(false);
+        }
+        _VarsDisp->setClockwiseCheck(seekerAngle);
+    }
+
+    else if (seekerAngle > _VarsDisp->getClockwiseCheck()) {
+        if (seekerAngle != 0 && (_VarsDisp->getClockwiseCheck() > 1)) {
+            _VarsDisp->setClockwise(true);
+        }
+        _VarsDisp->setClockwiseCheck(seekerAngle);
+    }
+
+    else {
+        _VarsDisp->setClockwiseCheck(seekerAngle);
+    }
+
     _VarsDisp->setAngle(seekerAngle);
     enemies[enemyCount].realDistance = distance;
     enemies[enemyCount].angle = angle;
@@ -149,7 +159,7 @@ void CDisplay::addEnemy(float distance, float angle, float height, float seekerA
     enemies[enemyCount].hY = 0.0f;
     enemies[enemyCount].isHighlighted = false;
     enemies[enemyCount].visited = false;
-    enemies[enemyCount].fadeAlpha = 1.0f;
+    enemies[enemyCount].fadeAlpha = 0.0f;
     enemies[enemyCount].highlightedRange = 0.0f;
     enemies[enemyCount].changedRange = false;
     enemyCount++;
@@ -170,9 +180,9 @@ void CDisplay::expandEnemyArray() {
 void CDisplay::drawEnemyHighlight() {
     for (int i = 0; i < enemyCount; ++i) {
         Enemy& enemy = enemies[i];
-
-        if (enemy.isHighlighted && ((_VarsDisp->getMousePosX() > enemy.x - 0.02f) && (_VarsDisp->getMousePosX() < enemy.x + 0.02f) && (_VarsDisp->getMousePosY() > enemy.y - 0.02f) && (_VarsDisp->getMousePosY() < enemy.y + 0.02f)) && !enemy.changedRange && enemy.realDistance < _VarsDisp->getOuterRange()) {
-            glColor3f(0.0f, 1.0f, 0.0f);
+        
+        if (enemy.isHighlighted && ((_VarsDisp->getMousePosX() > enemy.x - 0.01f) && (_VarsDisp->getMousePosX() < enemy.x + 0.01f) && (_VarsDisp->getMousePosY() > enemy.y - 0.01f) && (_VarsDisp->getMousePosY() < enemy.y + 0.01f)) && !enemy.changedRange && enemy.realDistance < _VarsDisp->getOuterRange()) {
+            glColor3f(1.0f, 1.0f, 1.0f);
             char buffer[256];
             sprintf_s(buffer, "h:%.0fm ", enemy.height);
             label.renderValues(enemy.x + 0.05f, enemy.y + 0.05f, buffer);
@@ -182,12 +192,12 @@ void CDisplay::drawEnemyHighlight() {
         }
 
         if (enemy.isHighlighted && enemy.realDistance < _VarsDisp->getOuterRange()) {
-            if (enemy.fadeAlpha >= 0.03f && _VarsDisp->getOuterRange() >= enemy.highlightedRange && !enemy.changedRange) {
+            if (enemy.fadeAlpha >= 0.05f && _VarsDisp->getOuterRange() >= enemy.highlightedRange && !enemy.changedRange) {
                 glColor3f(0.0f, enemy.fadeAlpha, 0.0f);
                 glPushMatrix();
                 glTranslatef(enemy.x, enemy.y, 1.0f);
                 glBegin(GL_TRIANGLE_FAN);
-                label.drawCircle(0.0f, 0.0f, 0.02f, 100);
+                label.drawCircle(0.0f, 0.0f, 0.01f, 100);
                 glEnd();
                 glPopMatrix();
             }

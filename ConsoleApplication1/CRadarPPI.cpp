@@ -8,10 +8,6 @@ void CRadarPPI::endRadarPPI() {
     display->endRadarPPI();
 }
 
-/*void CRadarPPI::addEnemy(float distance, float angle, float height, float seekerAngle) {
-    display->addEnemy(distance, angle, height, seekerAngle);
-}*/
-
 void CRadarPPI::addEnemy(void* dataArray, size_t arraySize) {
     display->addEnemy(dataArray, arraySize);
 }
