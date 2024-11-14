@@ -5,11 +5,9 @@
 #include "CInteractionHandler.h"
 #include <string>
 #include <cmath>
-#include <limits>
 #include <fstream>
 #include <iostream>
 #include <ctime>
-#include <vector>
 
 _Variables* _VarsUserDef = _Variables::getInstance();
 CDisplay& display = CDisplay::getInstance();
@@ -25,7 +23,8 @@ typedef struct {
 void CRadarDisplay::run() {
     int argc = 1;    char* argv[1] = { (char*)"RadarDisplay" };
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+    
     glutInitWindowSize(800, 800);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("Radar PPI");

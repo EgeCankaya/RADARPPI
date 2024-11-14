@@ -20,6 +20,10 @@ void CInteractionHandler::keyboard(unsigned char key, int x, int y) {
         if (key >= '0' && key <= '9') {
             _VarsHandler->addToInputBuffer(std::string(1, key));
         }
+        else if (key == 27) {
+            _VarsHandler->setIsClicked(false);
+            _VarsHandler->clearInputBuffer();
+        }
         else if (key == 13) {
             _VarsHandler->setIsClicked(false);
 

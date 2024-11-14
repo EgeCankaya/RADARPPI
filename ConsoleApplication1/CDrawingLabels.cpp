@@ -21,20 +21,33 @@ void CDrawingLabels::renderText(float x, float y, const char* text) {
 }
 
 void CDrawingLabels::drawSeeker() {
-    glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glColor4f(0.0f, 1.0f, 0.0f, 0.5f);
     glBegin(GL_LINES);
     glVertex2f(0.0f, 0.0f);
     glVertex2f(0.90f, 0.0f);
     glEnd();
 
-    float increment = (_VarsLabel->getClockwise()) ? 0.01f : -0.01f;
-    for (float i = 0.95f, x = 0.89f, y = increment; i >= 0.05f; i -= 0.05f, x -= 0.01f, y += increment) {
-        glColor4f(0.0f, i, 0.0f, 1.0f);
-        glBegin(GL_LINES);
+    glBegin(GL_TRIANGLE_STRIP);
+
+    float angleIncrement = (_VarsLabel->getClockwise()) ? -0.02f : 0.02f;
+    float angle = 0.0f;
+
+    for (float i = 0.95f; i >= 0.05f; i -= 0.05f) {
+        glColor4f(0.0f, i, 0.0f, i);
+
+        float x = 0.90f * cos(angle);
+        float y = 0.90f * -sin(angle);
+
+        glVertex2f(x, y); 
         glVertex2f(0.0f, 0.0f);
-        glVertex2f(x, y);
-        glEnd();
+
+        angle += angleIncrement;
     }
+
+    glEnd();
 }
 
 void CDrawingLabels::drawLinesWithAngles(int gap_in_degrees) {
@@ -212,15 +225,19 @@ void CDrawingLabels::drawButton(float x, float y, float width, float height, con
     glEnd();
 
     if (label == "-" || label == "+") {
-        renderText(x + width / 2 - 0.01, y + height / 2 - 0.01f, label);
+        renderText(x + width / 2 - 0.015f, y + height / 2 - 0.02f, label);
     }
 
     else if (label == "Degree Between Lines") {
-        renderText(x + width / 2 - 0.22, y + height / 2 - 0.01f, label);
+        renderText(x + width / 2 - 0.22f, y + height / 2 - 0.01f, label);
+    }
+
+    else if (label == "Settings") {
+        renderText(x + width / 2 - 0.08f, y + height / 2 - 0.01f, label);
     }
 
     else {
-        renderText(x + width / 2 - 0.10, y + height / 2 - 0.01f, label);
+        renderText(x + width / 2 - 0.10f, y + height / 2 - 0.02f, label);
     }
 }
 

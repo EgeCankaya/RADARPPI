@@ -4,8 +4,8 @@
 class CRadarDisplay : public IRadarDisplay {
 public:
     void run() override;
-    void addEnemy(void* dataArray, size_t arraySize);
-    //void addEnemy(float distance, float angle, float height, float seekerAngle) override;
+    void addEnemy(void* dataArray, size_t arraySize) override;
+
     void updateEnemy() override;
     void endRadarPPI() override;
 

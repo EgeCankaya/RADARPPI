@@ -11,7 +11,6 @@ public:
     static CDisplay& getInstance();
     
 private:
-    
     struct Enemy {
         float realDistance;
         float angle;
@@ -43,7 +42,6 @@ private:
     static void timerWrapper(int value);
     static void displayWrapper();
     
-    float findClosestEnemyAngle();
     void expandEnemyArray();
     void removeEnemy(int index);
 };
