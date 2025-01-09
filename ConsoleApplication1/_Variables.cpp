@@ -49,9 +49,9 @@ float _Variables::getOuterRange() const { return outerRange; }
 void _Variables::setOuterRange(float range) { outerRange = range; }
 void _Variables::addToOuterRange(float range) { outerRange += range; }
 
-float _Variables::getLineGap() const { return lineGap; }
-void _Variables::setLineGap(float gap) { lineGap = gap; }
-void _Variables::addToLineGap(float gap) { lineGap += gap; }
+int _Variables::getLineGap() const { return lineGap; }
+void _Variables::setLineGap(int gap) { lineGap = gap; }
+void _Variables::addToLineGap(int gap) { lineGap += gap; }
 
 float _Variables::getRangeScale() const { return rangeScale; }
 void _Variables::setRangeScale(float scale) { rangeScale = scale; }

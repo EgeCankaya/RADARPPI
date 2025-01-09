@@ -211,7 +211,7 @@ void CDrawingLabels::drawCurrentValues() {
     sprintf_s(buffer, "%.0f km", _VarsLabel->getOuterRange());
     renderValues(-0.05f, 0.43f, buffer);
 
-    sprintf_s(buffer, "%.0f degrees", _VarsLabel->getLineGap());
+    sprintf_s(buffer, "%d degrees", _VarsLabel->getLineGap());
     renderValues(0.08f, 0.28f, buffer);
 }
 
@@ -270,5 +270,3 @@ void CDrawingLabels::drawButtons() {
         drawButton(-0.07f, 0.25f, 0.13f, 0.1f, "+");
     }
 }
-
-

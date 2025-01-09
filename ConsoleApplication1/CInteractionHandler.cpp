@@ -35,7 +35,7 @@ void CInteractionHandler::keyboard(unsigned char key, int x, int y) {
                         _VarsHandler->setHeightUplimit(_VarsHandler->getHeightLowlimit());
                     }
                     else {
-                        _VarsHandler->setHeightUplimit(static_cast<float>(number));
+                        _VarsHandler->setHeightUplimit(number);
                     }
                 }
                 else if (_VarsHandler->getBoxID() == 1) {
@@ -43,7 +43,7 @@ void CInteractionHandler::keyboard(unsigned char key, int x, int y) {
                         _VarsHandler->setHeightLowlimit(_VarsHandler->getHeightUplimit());
                     }
                     else {
-                        _VarsHandler->setHeightLowlimit(static_cast<float>(number));
+                        _VarsHandler->setHeightLowlimit(number);
                     }
                 }
                 else if (_VarsHandler->getBoxID() == 2) {
@@ -52,7 +52,7 @@ void CInteractionHandler::keyboard(unsigned char key, int x, int y) {
 
                 }
                 else if (_VarsHandler->getBoxID() == 3) {
-                    _VarsHandler->setLineGap(static_cast<float>(number));
+                    _VarsHandler->setLineGap(number);
                 }
             }
 
@@ -207,12 +207,12 @@ void CInteractionHandler::decreaseRange() {
 }
 
 void CInteractionHandler::increaseHeightUp() {
-    _VarsHandler->addToHeightUplimit(50.0f);
+    _VarsHandler->addToHeightUplimit(50);
 }
 
 void CInteractionHandler::decreaseHeightUp() {
-    if (_VarsHandler->getHeightUplimit() > 50.0f) {
-        _VarsHandler->addToHeightUplimit(-50.0f);
+    if (_VarsHandler->getHeightUplimit() > 50) {
+        _VarsHandler->addToHeightUplimit(-50);
     }
     else {
         _VarsHandler->addToHeightUplimit(-_VarsHandler->getHeightUplimit());
@@ -220,12 +220,12 @@ void CInteractionHandler::decreaseHeightUp() {
 }
 
 void CInteractionHandler::increaseHeightLow() {
-    _VarsHandler->addToHeightLowlimit(50.0f);
+    _VarsHandler->addToHeightLowlimit(50);
 }
 
 void CInteractionHandler::decreaseHeightLow() {
-    if (_VarsHandler->getHeightLowlimit() > 5.0f) {
-        _VarsHandler->addToHeightLowlimit(-5.0f);
+    if (_VarsHandler->getHeightLowlimit() > 50) {
+        _VarsHandler->addToHeightLowlimit(-50);
     }
     else {
         _VarsHandler->addToHeightLowlimit(-_VarsHandler->getHeightLowlimit());
@@ -233,11 +233,11 @@ void CInteractionHandler::decreaseHeightLow() {
 }
 
 void CInteractionHandler::increaseLineGap() {
-    _VarsHandler->addToLineGap(15.0f);
+    _VarsHandler->addToLineGap(15);
 }
 
 void CInteractionHandler::decreaseLineGap() {
-    _VarsHandler->addToLineGap(-15.0f);
+    _VarsHandler->addToLineGap(-15);
 }
 
 void CInteractionHandler::setCallbacks() {

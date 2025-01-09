@@ -22,7 +22,7 @@ private:
 
     int heightUplimit, heightLowlimit;
     float outerRange;
-    float lineGap;
+    int lineGap;
     float rangeScale;
     bool clockwise;
     float clockwiseCheck;
@@ -81,9 +81,9 @@ public:
     void setOuterRange(float range);
     void addToOuterRange(float range);
 
-    float getLineGap() const;
-    void setLineGap(float gap);
-    void addToLineGap(float gap);
+    int getLineGap() const;
+    void setLineGap(int gap);
+    void addToLineGap(int gap);
 
     float getRangeScale() const;
     void setRangeScale(float scale);

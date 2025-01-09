@@ -105,7 +105,6 @@ void CDisplay::calculateEnemyHighlight() {
     }
 }
 
-
 void CDisplay::addEnemy(float distance, float angle, float height, float seekerAngle) {
     if (enemyCount == enemyCapacity) {
         expandEnemyArray();
@@ -129,7 +128,6 @@ void CDisplay::addEnemy(float distance, float angle, float height, float seekerA
         _VarsDisp->setClockwiseCheck(seekerAngle);
     }
 
-    _VarsDisp->setAngle(seekerAngle);
     enemies[enemyCount].realDistance = distance;
     enemies[enemyCount].angle = angle;
     enemies[enemyCount].height = height;
@@ -146,6 +144,8 @@ void CDisplay::addEnemy(float distance, float angle, float height, float seekerA
     enemies[enemyCount].highlightedRange = 0.0f;
     enemies[enemyCount].changedRange = false;
     enemyCount++;
+    _VarsDisp->setAngle(seekerAngle);
+
 }
 
 void CDisplay::expandEnemyArray() {
@@ -161,7 +161,6 @@ void CDisplay::expandEnemyArray() {
     delete[] enemies;
     enemies = newEnemies;
 }
-
 
 void CDisplay::drawEnemyHighlight() {
     for (int i = 0; i < enemyCount; ++i) {

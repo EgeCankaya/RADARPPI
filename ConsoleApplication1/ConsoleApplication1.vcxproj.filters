@@ -27,13 +27,10 @@
     <ClCompile Include="CDrawingLabels.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CRadarDisplay.cpp">
+    <ClCompile Include="CRadarPPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="_Variables.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CRadarPPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -48,15 +45,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CDrawingLabels.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IRadarDisplay.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CRadarDisplay.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CRadarPPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RadarPPI.h">
